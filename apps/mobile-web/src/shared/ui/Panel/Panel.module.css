@@ -1,0 +1,8 @@
+.panel {
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--gradient-panel);
+  backdrop-filter: var(--blur-surface);
+  padding: 6px;
+}
