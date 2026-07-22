@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm /Users/tuffhr7/Desktop/codingGillie/nextjs/workspace/glimpse-of-epiphany/apps/mobile-web/.eslintrc.cjs /Users/tuffhr7/Desktop/codingGillie/nextjs/workspace/glimpse-of-epiphany/apps/projector-web/.eslintrc.cjs)"
+    ],
+    "additionalDirectories": [
+      "/Users/tuffhr7/Desktop/codingGillie/nextjs/workspace/glimpse-of-epiphany/apps/mobile-web"
+    ]
+  }
+}
