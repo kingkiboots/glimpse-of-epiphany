@@ -14,6 +14,12 @@ importers:
 
   apps/mobile-web:
     dependencies:
+      '@fontsource/diphylleia':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/noto-serif-kr':
+        specifier: ^5.3.0
+        version: 5.3.0
       react:
         specifier: ^19.2.7
         version: 19.2.7
@@ -48,6 +54,12 @@ importers:
 
   apps/projector-web:
     dependencies:
+      '@fontsource/diphylleia':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/noto-serif-kr':
+        specifier: ^5.3.0
+        version: 5.3.0
       react:
         specifier: ^19.2.7
         version: 19.2.7
@@ -217,6 +229,12 @@ packages:
   '@eslint/plugin-kit@0.7.2':
     resolution: {integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@fontsource/diphylleia@5.3.0':
+    resolution: {integrity: sha512-S4gwz4zeyiQ8Gh9gHSw+C86dkUktyJ0+KQjiENSYsxxQo8H2lZbZ7c5Wj6d4cK/iFe+n+CSlKT3fX9CjgqGqYw==}
+
+  '@fontsource/noto-serif-kr@5.3.0':
+    resolution: {integrity: sha512-PMVJPol7ZsWntq4p1blZnhzl1hJruzzQZbWOZJPnJriw+nEUPYyG+pkWCCHfbziZ6OolSxl1o05Z0gy4iMGmPA==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -1149,6 +1167,10 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@fontsource/diphylleia@5.3.0': {}
+
+  '@fontsource/noto-serif-kr@5.3.0': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
