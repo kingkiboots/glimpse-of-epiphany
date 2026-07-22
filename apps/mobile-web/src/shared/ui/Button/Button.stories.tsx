@@ -14,7 +14,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {args: {
+  children: '일상 속 감사 찾기'
+}};
 
 export const Disabled: Story = {
   args: {

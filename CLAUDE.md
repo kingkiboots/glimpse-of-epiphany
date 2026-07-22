@@ -35,6 +35,12 @@
 
 - **Dependency Rule:** 상위 레이어는 하위 레이어를 import 할 수 있지만, 하위 레이어는 절대 상위 레이어를 import 할 수 없습니다. (단방향 의존성)
 - **Cross-import Rule:** 동일한 레이어 내부의 다른 슬라이스끼리는 직접 import 할 수 없습니다.
+- **Structure Rule (Layer/Slice/Segment):**
+  - `app`, `shared`는 슬라이스(slice)가 없는 레이어입니다. 레이어 바로 아래에 세그먼트(`ui`, `lib`, `styles`, `config`, `api` 등)가 옵니다.
+    - 예) `app/styles/global.css`, `shared/ui/Button/`, `shared/lib/`, `shared/api/`
+  - `pages`, `widgets`, `features`, `entities`는 슬라이스가 있는 레이어입니다. 반드시 `레이어/슬라이스/세그먼트` 3단계 구조를 따릅니다.
+    - 예) `widgets/loading-screen/ui/LoadingScreen.tsx`, `features/upload-image/model/useUpload.ts`, `entities/photo/model/types.ts`
+  - 각 슬라이스 루트에는 `index.ts`로 공개 API(barrel)를 두고, 슬라이스 외부에서는 반드시 이 `index.ts`를 통해서만 import 합니다 (세그먼트 내부 파일을 직접 import 금지).
 
 ## AI Coding Agent (Claude) Guidelines
 

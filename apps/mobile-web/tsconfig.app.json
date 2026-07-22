@@ -23,6 +23,7 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
+      "@/*": ["./src/*"],
       "@packages/api": ["../../packages/api/src/index.ts"],
       "@packages/config": ["../../packages/config/src/index.ts"],
       "@packages/ui": ["../../packages/ui/src/index.ts"]

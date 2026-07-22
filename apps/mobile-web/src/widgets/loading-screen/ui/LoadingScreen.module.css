@@ -1,0 +1,68 @@
+.screen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-container);
+  background-color: var(--color-bg);
+  background-size: cover;
+  background-position: center;
+  color: var(--color-text);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-image-overlay);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-title);
+  text-shadow: var(--shadow-text);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loadingLabel {
+  font-family: var(--font-display);
+  font-size: var(--font-size-button);
+  text-shadow: var(--shadow-text);
+}
+
+.verse {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.verseReference {
+  font-family: var(--font-display);
+  font-size: var(--font-size-body);
+  text-shadow: var(--shadow-text-strong);
+}
+
+.verseText {
+  font-family: var(--font-display);
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  white-space: pre-line;
+  text-shadow: var(--shadow-text-strong);
+}
