@@ -1,15 +1,48 @@
-import type { HTMLAttributes } from "react";
+import { GLASS_EFFECT, RADIUS } from "@/shared/consts";
+import LiquidGlass from "liquid-glass-react";
+import type { ComponentProps, ReactNode } from "react";
 import styles from "./Panel.module.css";
 
-type PanelProps = HTMLAttributes<HTMLDivElement>;
+type PanelProps = ComponentProps<typeof LiquidGlass> & {
+  children: ReactNode;
+  width?: string | number;
+  height?: string | number;
+  className?: string;
+  radius?: keyof typeof RADIUS;
+};
 
-const Panel = ({ className, children, ...props }: PanelProps) => {
+const Panel = ({
+  className,
+  children,
+  width,
+  height,
+  radius = "panel",
+  padding = "0",
+  style,
+  ...rest
+}: PanelProps) => {
   return (
     <div
-      className={[styles.panel, className].filter(Boolean).join(" ")}
-      {...props}
+      className={styles.root}
+      style={{
+        width,
+        height,
+      }}
     >
-      {children}
+      <LiquidGlass
+        {...GLASS_EFFECT}
+        cornerRadius={RADIUS[radius]}
+        padding={padding}
+        className={[styles.panel, className].filter(Boolean).join(" ")}
+        style={{
+          width,
+          height,
+          ...style,
+        }}
+        {...rest}
+      >
+        {children}
+      </LiquidGlass>
     </div>
   );
 };

@@ -1,37 +1,62 @@
-import { useEffect, useMemo, useRef, type ChangeEventHandler } from 'react'
-import styles from './ImageBox.module.css'
+import { RADIUS } from "@/shared/consts";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEventHandler,
+} from "react";
+import styles from "./ImageBox.module.css";
 
 type ImageBoxProps = {
-  file: File | null
-  onChange: (file: File | null) => void
-  className?: string
-  placeholder?: string
-}
+  file: File | null;
+  onChange: (file: File | null) => void;
+  placeholder?: string;
+};
 
-const ImageBox = ({ file, onChange, className, placeholder = '사진 선택하기' }: ImageBoxProps) => {
-  const inputRef = useRef<HTMLInputElement>(null)
-  const previewUrl = useMemo(() => (file ? URL.createObjectURL(file) : null), [file])
+const ImageBox = ({
+  file,
+  onChange,
+  placeholder = "사진 선택하기",
+}: ImageBoxProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl)
+    if (!file) {
+      setPreviewUrl(null);
+      return;
     }
-  }, [previewUrl])
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    onChange(event.target.files?.[0] ?? null)
-  }
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      onChange(event.target.files?.[0] ?? null);
+    },
+    [onChange],
+  );
 
   return (
     <button
       type="button"
-      className={[styles.box, className].filter(Boolean).join(' ')}
+      className={styles.root}
       onClick={() => inputRef.current?.click()}
     >
       {previewUrl ? (
-        <img src={previewUrl} alt="선택한 사진 미리보기" className={styles.preview} />
+        <img
+          src={previewUrl}
+          alt="선택한 사진 미리보기"
+          className={styles.preview}
+        />
       ) : (
-        <span className={styles.placeholder}>{placeholder}</span>
+        <span className={styles.placeholder}>
+          <span className={styles.placeholderLabel}>{placeholder}</span>
+        </span>
       )}
       <input
         ref={inputRef}
@@ -41,7 +66,7 @@ const ImageBox = ({ file, onChange, className, placeholder = '사진 선택하�
         onChange={handleChange}
       />
     </button>
-  )
-}
+  );
+};
 
-export default ImageBox
+export default ImageBox;

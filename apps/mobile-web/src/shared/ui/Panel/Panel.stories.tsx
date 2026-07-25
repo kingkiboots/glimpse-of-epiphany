@@ -7,9 +7,22 @@ const meta = {
   title: "shared/ui/Panel",
   component: Panel,
   tags: ["autodocs"],
+  args: {
+    children: null,
+  },
   decorators: [
     (Story) => (
-      <div style={{ padding: 24, background: "var(--color-bg)" }}>
+      // liquid-glass-react가 그리는 레이어는 전부 position:absolute라 이 래퍼가
+      // 흐름으로 스스로 높이를 확보하지 못한다. 명시적 minHeight가 없으면 이 데코레이터가
+      // padding만큼으로 찌그러지고, Panel의 top/left 50% 중앙 정렬 기준점도 같이 찌그러진다.
+      <div
+        style={{
+          position: "relative",
+          minHeight: 480,
+          padding: 24,
+          background: "var(--color-bg)",
+        }}
+      >
         <Story />
       </div>
     ),
@@ -30,10 +43,8 @@ export const WithImageBox: Story = {
   render: function Render() {
     const [file, setFile] = useState<File | null>(null);
     return (
-      <Panel style={{ width: 272, padding: 6, display: "flex" }}>
-        <div style={{ width: "100%", aspectRatio: "251 / 228" }}>
-          <ImageBox file={file} onChange={setFile} />
-        </div>
+      <Panel radius="image" padding="8px" width={272} height={247}>
+        <ImageBox file={file} onChange={setFile} />
       </Panel>
     );
   },
@@ -51,7 +62,7 @@ export const WithImageBoxAndText: Story = {
           flexDirection: "column",
         }}
       >
-        <div style={{ width: "100%", aspectRatio: "251 / 228" }}>
+        <div style={{ width: 251, height: 228 }}>
           <ImageBox file={file} onChange={setFile} />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
