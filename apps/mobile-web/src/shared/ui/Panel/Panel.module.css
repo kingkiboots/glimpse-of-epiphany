@@ -1,8 +1,38 @@
-.panel {
-  overflow: hidden;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-panel);
-  background: var(--gradient-panel);
-  backdrop-filter: var(--blur-surface);
-  padding: 6px;
+.root {
+  position: relative;
+  display: flex;
+}
+
+.root > div,
+.root > span {
+  position: absolute !important;
+}
+
+/*
+ * liquid-glass-react가 실제로 그리는 유리 박스는 우리 className이 아니라 라이브러리
+ * 내부 고정 클래스(.glass)에 있고, 콘텐츠+padding 크기로만 자동 계산된다(padding="0"으로
+ * 넘겨도 크기 자체를 100%로 늘려주진 않음). Panel을 부모 크기에 꽉 채우려면 내부 .glass를
+ * 직접 겨냥해서 늘려야 한다.
+ */
+.panel :global(.glass) {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.panel :global(.glass > div) {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * app/styles/liquid-glass-compat.css에 적어둔 이유와 동일하게, 라이브러리가 렌더링하는
+ * 3개의 형제 레이어가 일반 흐름 안에서 서로 어긋나지 않도록 이 Panel의 바깥 래퍼(=이
+ * className과 라이브러리가 붙이는 전역 "relative" 클래스를 동시에 가진 요소)도 absolute로
+ * 흐름에서 빼준다.
+ */
+.panel:global(.relative) {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
 }

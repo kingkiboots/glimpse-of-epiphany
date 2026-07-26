@@ -1,0 +1,66 @@
+/*
+ * liquid-glass-react(v1.1.1) 호환 패치.
+ *
+ * 이 라이브러리는 내부적으로 Tailwind 유틸리티 클래스명(bg-black, opacity-0 등)을
+ * 그대로 사용하지만 CSS는 배포 패키지에 포함하지 않는다. 이 프로젝트는 Tailwind를
+ * 쓰지 않으므로(CLAUDE.md), 프레임워크를 설치하는 대신 이 라이브러리가 실제로
+ * 기대하는 만큼만 최소한으로 재현한다.
+ *
+ * 추가로 이 라이브러리는 <LiquidGlass>를 Fragment로 렌더링해서 장식용 반사광 div 2개 +
+ * 실제 유리 박스 1개, 총 3개의 형제 노드를 만든다. 셋 다 position:relative + top/left 50% +
+ * translate(-50%, -50%) 트릭으로 같은 자리에 겹쳐지도록 설계되어 있는데, 이 트릭은 세
+ * 요소가 모두 "일반 흐름상 같은 시작 위치"에서 출발해야 성립한다. CSS Modules로 만든
+ * 일반 블록 컨텍스트 안에 놓이면 형제 요소들이 순서대로 쌓여 서로 어긋나 버리므로,
+ * 장식용 반사광 레이어를 absolute로 바꿔 흐름에서 완전히 빼준다.
+ */
+.relative {
+  position: absolute;
+}
+
+.bg-black {
+  /* background-color: red; */
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-20 {
+  opacity: 0.2;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.mix-blend-overlay {
+  mix-blend-mode: overlay;
+}
+
+.transition-all {
+  transition-property: all;
+}
+
+.duration-150 {
+  transition-duration: 150ms;
+}
+
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* .text-white {
+  color: #fff;
+} */
+
+.bg-black.pointer-events-none {
+  position: absolute !important;
+}
