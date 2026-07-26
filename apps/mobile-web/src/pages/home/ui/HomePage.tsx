@@ -1,8 +1,16 @@
-import Typography from "@/shared/ui/Typography";
-import styles from "./HomePage.module.css";
+import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
+import Typography from "@/shared/ui/Typography";
+import { useNavigate } from "@tanstack/react-router";
+import styles from "./HomePage.module.css";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleCtaClick = () => {
+    navigate({ to: ROUTE_PATHS.preparing });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.textArea}>
@@ -17,7 +25,9 @@ const HomePage = () => {
         </Typography>
       </div>
       <div className={styles.ctaArea}>
-        <Button aria-describedby="cta-caption">일상 속 감사 찾기</Button>
+        <Button aria-describedby="cta-caption" onClick={handleCtaClick}>
+          일상 속 감사 찾기
+        </Button>
         <Typography
           as={"p"}
           variant="caption"
