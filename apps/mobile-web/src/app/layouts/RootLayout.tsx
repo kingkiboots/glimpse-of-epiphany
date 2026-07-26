@@ -12,7 +12,10 @@ const RootLayout = () => {
       backgroundImageUrl={backgroundImageUrl}
       scrim={pathname !== ROUTE_PATHS.home}
     >
-      <Outlet />
+      {/* display: contents로 레이아웃엔 관여하지 않고 접근성 트리에만 본문 랜드마크를 추가 */}
+      <main style={{ display: "contents" }}>
+        <Outlet />
+      </main>
     </ScreenBackground>
   );
 };

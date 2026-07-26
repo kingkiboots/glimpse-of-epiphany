@@ -4,7 +4,7 @@ import Button from "@/shared/ui/Button";
 
 const HomePage = () => {
   return (
-    <section className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.textArea}>
         <Typography as={"h1"} variant="title">
           일상 속 감사 찾기
@@ -17,12 +17,17 @@ const HomePage = () => {
         </Typography>
       </div>
       <div className={styles.ctaArea}>
-        <Button>일상 속 감사 찾기</Button>
-        <Typography as={"p"} variant="caption" className={styles.ctaCaption}>
+        <Button aria-describedby="cta-caption">일상 속 감사 찾기</Button>
+        <Typography
+          as={"p"}
+          variant="caption"
+          id="cta-caption"
+          className={styles.ctaCaption}
+        >
           선택 후 바로 공유되지 않습니다.
         </Typography>
       </div>
-    </section>
+    </div>
   );
 };
 
