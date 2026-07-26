@@ -1,5 +1,5 @@
-@import '@fontsource/diphylleia/400.css';
-@import '@fontsource/noto-serif-kr/400.css';
+@import "@fontsource/diphylleia/400.css";
+@import "@fontsource/noto-serif-kr/400.css";
 
 /* CSS Reset */
 *,
@@ -67,12 +67,26 @@ a {
   --gradient-image-overlay: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.08) 50%,
     rgba(102, 102, 102, 0) 100%
   );
+  --gradient-image-scrim: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.15) 50%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
   --gradient-panel:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 100%);
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.3) 100%
+    );
 
   /* Radius */
   --radius-container: 40px;
@@ -84,8 +98,8 @@ a {
   --blur-surface: blur(2px);
 
   /* Typography */
-  --font-display: 'Diphylleia', serif;
-  --font-serif: 'Noto Serif KR', serif;
+  --font-display: "Diphylleia", serif;
+  --font-serif: "Noto Serif KR", serif;
 
   --font-size-title: 24px;
   --font-size-button: 16px;

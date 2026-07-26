@@ -23,7 +23,8 @@ const ScreenBackground = ({
           : undefined
       }
     >
-      {scrim ? <div className={styles.overlay} /> : null}
+      <div className={scrim ? styles.scrim : styles.overlay} />
+
       <div className={styles.content}>{children}</div>
     </div>
   );
