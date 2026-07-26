@@ -79,7 +79,6 @@ export const WithImageBoxAndText: Story = {
         padding="11px"
         style={{
           width: 272,
-
           minHeight: "388px",
         }}
       >

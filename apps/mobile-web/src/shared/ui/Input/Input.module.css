@@ -1,22 +1,29 @@
 .wrapper {
   position: relative;
   width: 100%;
+  min-height: 114px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .textarea {
   display: block;
-  width: 100%;
-  min-height: 114px;
-  padding: 12px 16px 28px;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-panel);
-  background: var(--gradient-panel);
-  backdrop-filter: var(--blur-surface);
+  flex: 1 0 0;
+  min-height: 97px;
+  /* padding: 12px 16px 28px; */
+  border: none;
+  background: none;
   color: var(--color-text);
   font-family: var(--font-display);
   font-size: var(--font-size-small);
   text-shadow: var(--shadow-text);
   resize: none;
+
+  /* Firefox 표준 설정 (반투명 막대 / 투명 트랙) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
 .textarea:focus {
@@ -27,11 +34,32 @@
   color: var(--color-text);
   opacity: 0.51;
 }
+/* 1. 스크롤바 두께를 아주 얇게 (4px) */
+textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* 2. 뒷배경(트랙)을 완전히 투명하게 제거 */
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 3. 막대(Thumb)만 둥글고 은은하게 표시 */
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); /* 어두운 배경용 반투명 흰색 */
+  border-radius: 10px;
+}
+
+/* 4. 마우스 올렸을 때만 살짝 더 밝아지게 */
+textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
 
 .counter {
-  position: absolute;
+  /* position: absolute;
   right: 16px;
-  bottom: 10px;
+  bottom: 10px; */
+  text-align: right;
   font-family: var(--font-display);
   font-size: var(--font-size-small);
   color: var(--color-text);
