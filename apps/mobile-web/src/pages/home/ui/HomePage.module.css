@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 50px 25px;
+}
+
+.textArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 55px;
+  text-align: center;
+}
+
+.ctaArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.ctaCaption {
+  z-index: 1;
+  /* Safari 렌더링 버그 해결 */
+  transform: translateZ(0);
+}
