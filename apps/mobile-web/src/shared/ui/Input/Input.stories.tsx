@@ -36,7 +36,7 @@ export const Default: Story = {
   render: function Render(args) {
     const [value, setValue] = useState("");
     return (
-      <Panel radius="panel" padding="10px" width={272}>
+      <Panel radius="panel" padding="10px 12px" width={272}>
         <Input
           {...args}
           value={value}
