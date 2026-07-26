@@ -1,15 +1,11 @@
 import Typography from "@/shared/ui/Typography";
 import styles from "./PreparingPage.module.css";
 import { useState } from "react";
+import { getRandomBibleVerse } from "@/features/bible-verse/consts";
 import Spinner from "@/shared/ui/Spinner";
 
 const PreparingPage = () => {
-  const [bibleVerse] = useState({
-    book: "에베소서",
-    chapter: 5,
-    verse: 20,
-    text: "범사에 우리 주 예수 그리스도의 이름으로 항상 아버지 하나님께 감사하며",
-  });
+  const [bibleVerse] = useState(getRandomBibleVerse);
   const { book, chapter, verse, text } = bibleVerse;
   return (
     <div className={styles.container}>
