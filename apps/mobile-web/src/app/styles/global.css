@@ -75,6 +75,7 @@ a {
     rgba(0, 0, 0, 0.3) 50%,
     rgba(102, 102, 102, 0) 100%
   );
+  --gradient-image-scrim: rgba(0, 0, 0, 0.65);
   --gradient-panel:
     linear-gradient(
       180deg,

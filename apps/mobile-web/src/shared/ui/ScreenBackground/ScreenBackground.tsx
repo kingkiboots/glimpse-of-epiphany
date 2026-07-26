@@ -24,7 +24,6 @@ const ScreenBackground = ({
       }
     >
       <div className={scrim ? styles.scrim : styles.overlay} />
-
       <div className={styles.content}>{children}</div>
     </div>
   );
