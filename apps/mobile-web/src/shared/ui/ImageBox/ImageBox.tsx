@@ -1,4 +1,3 @@
-import { RADIUS } from "@/shared/consts";
 import {
   useCallback,
   useEffect,
