@@ -9,6 +9,7 @@
 }
 
 .textarea {
+  composes: small from "@/shared/styles/typography.module.css";
   display: block;
   flex: 1 0 0;
   min-height: 97px;
@@ -16,9 +17,6 @@
   border: none;
   background: none;
   color: var(--color-text);
-  font-family: var(--font-display);
-  font-size: var(--font-size-small);
-  text-shadow: var(--shadow-text);
   resize: none;
 
   /* Firefox 표준 설정 (반투명 막대 / 투명 트랙) */
@@ -56,13 +54,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 .counter {
+  composes: small from "@/shared/styles/typography.module.css";
   /* position: absolute;
   right: 16px;
   bottom: 10px; */
   text-align: right;
-  font-family: var(--font-display);
-  font-size: var(--font-size-small);
   color: var(--color-text);
-  text-shadow: var(--shadow-text);
   pointer-events: none;
 }

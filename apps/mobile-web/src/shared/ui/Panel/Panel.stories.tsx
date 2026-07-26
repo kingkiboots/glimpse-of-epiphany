@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import ImageBox from "@/shared/ui/ImageBox";
+import Typography from "@/shared/ui/Typography";
 import Panel from "./Panel";
 
 const BG_IMAGES = [
@@ -105,27 +106,16 @@ export const WithImageBoxAndText: Story = {
               textTransform: "capitalize",
             }}
           >
-            <p
-              style={{
-                textShadow: "var(--shadow-text)",
-                fontFamily: "var(--font-display)",
-                fontSize: "var(--font-size-small)",
-              }}
-            >
+            <Typography as="p" variant="small">
               감사한 날이었다~~
               <br /> 너무 좋다~~~~
               <br /> 행복하고 하나님 너무 좋다~~~~
               <br /> 조금 안감사했지만 돌아보니 감사하다
-            </p>
-            <p
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: "var(--font-size-caption)",
-              }}
-            >
+            </Typography>
+            <Typography as="p" variant="caption" style={{ textShadow: "none" }}>
               2026.08.14
               <br /> 삶으로 쓰는 예배전 (展)
-            </p>
+            </Typography>
           </div>
         </div>
       </Panel>

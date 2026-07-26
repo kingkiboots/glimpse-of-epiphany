@@ -29,9 +29,7 @@
 }
 
 .title {
-  font-family: var(--font-display);
-  font-size: var(--font-size-title);
-  text-shadow: var(--shadow-text);
+  composes: title from "@/shared/styles/typography.module.css";
 }
 
 .loading {
@@ -42,9 +40,7 @@
 }
 
 .loadingLabel {
-  font-family: var(--font-display);
-  font-size: var(--font-size-button);
-  text-shadow: var(--shadow-text);
+  composes: button from "@/shared/styles/typography.module.css";
 }
 
 .verse {
@@ -54,14 +50,12 @@
 }
 
 .verseReference {
-  font-family: var(--font-display);
-  font-size: var(--font-size-body);
+  composes: body from "@/shared/styles/typography.module.css";
   text-shadow: var(--shadow-text-strong);
 }
 
 .verseText {
-  font-family: var(--font-display);
-  font-size: var(--font-size-body);
+  composes: body from "@/shared/styles/typography.module.css";
   line-height: 1.6;
   white-space: pre-line;
   text-shadow: var(--shadow-text-strong);
