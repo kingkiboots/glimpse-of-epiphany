@@ -48,7 +48,7 @@
 
 .label {
   color: var(--color-text);
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--font-size-button);
   text-shadow: var(--shadow-text);
 }

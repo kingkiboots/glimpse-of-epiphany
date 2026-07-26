@@ -38,7 +38,7 @@ export const Empty: Story = {
   render: function Render(args) {
     const [file, setFile] = useState<File | null>(null);
     return (
-      <Panel radius="image" padding="8px" width={272} height={247}>
+      <Panel radius="panel" padding="8px" width={272} height={247}>
         <ImageBox {...args} file={file} onChange={setFile} />
       </Panel>
     );
