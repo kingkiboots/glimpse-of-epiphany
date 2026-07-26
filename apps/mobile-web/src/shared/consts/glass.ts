@@ -2,9 +2,9 @@
 // 모든 유리 표면(Panel)이 이 프로필 하나를 공유해서 통일된 "리퀴드 글래스" 느낌을 유지한다.
 export const GLASS_EFFECT = {
   displacementScale: 100,
-  blurAmount: 0.5,
+  blurAmount: 0.8,
   saturation: 140,
-  aberrationIntensity: 2,
-  elasticity: 0.0,
+  aberrationIntensity: 5,
+  elasticity: 0.5,
   overLight: true,
 } as const;
