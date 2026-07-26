@@ -25,3 +25,6 @@ dist-ssr
 
 *storybook.log
 storybook-static
+
+# TanStack Router (auto-generated)
+src/routeTree.gen.ts

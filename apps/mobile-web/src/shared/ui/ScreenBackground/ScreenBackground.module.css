@@ -1,0 +1,21 @@
+.screen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  background-size: cover;
+  background-position: center;
+  color: var(--color-text);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-image-overlay);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
