@@ -1,7 +1,8 @@
 .root {
   position: relative;
   display: inline-block;
-  width: 226px;
+  width: 226px; /* min() 미지원 브라우저 폴백 */
+  width: min(226px, 100%);
   height: 64px;
   padding: 0;
 }

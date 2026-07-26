@@ -13,7 +13,12 @@
   padding: 0;
 }
 
-html,
+html {
+  /* 모바일 브라우저 주소창 접힘/펼침에 따른 뷰포트 높이 변화 대응 (구형 브라우저 폴백 포함) */
+  height: 100vh;
+  height: 100dvh;
+}
+
 body,
 #root {
   height: 100%;
