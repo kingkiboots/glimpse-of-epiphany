@@ -5,11 +5,19 @@ import Panel from "@/shared/ui/Panel";
 import { useId, useState } from "react";
 
 import styles from "./ComposePage.module.css";
+import { useNavigate } from "@tanstack/react-router";
+import { ROUTE_PATHS } from "@/shared/consts";
 
 const ComposePage = () => {
   const id = useId();
   const [file, setFile] = useState<File | null>(null);
   const [value, setValue] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate({ to: ROUTE_PATHS.confirm });
+  };
 
   return (
     <div className={styles.content}>
@@ -39,7 +47,7 @@ const ComposePage = () => {
         <p id="cta-caption" className={styles.ctaCaption}>
           *내용은 공유되지 않습니다.
         </p>
-        <Button aria-describedby="cta-caption" onClick={() => {}}>
+        <Button aria-describedby="cta-caption" onClick={handleSubmit}>
           작성 완료
         </Button>
       </div>

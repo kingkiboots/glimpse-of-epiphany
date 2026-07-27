@@ -12,7 +12,7 @@ const PreparingPage = () => {
   const navigate = useNavigate();
 
   /**
-   * 5초는 조금 짧을 수도 있으니깐 3초 뒤 __skip->__ 버튼이 뜨게 하는건 어떨까? 
+   * 5초는 조금 짧을 수도 있으니깐 3초 뒤 __skip->__ 버튼이 뜨게 하는건 어떨까?
    */
   useEffect(() => {
     setTimeout(() => {
@@ -22,7 +22,7 @@ const PreparingPage = () => {
 
   return (
     <div className={styles.content}>
-      <header >
+      <header>
         <h1 className={styles.title}>일상 속 감사 찾기</h1>
       </header>
       <div className={styles.loading}>
