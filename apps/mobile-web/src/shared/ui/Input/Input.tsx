@@ -1,3 +1,4 @@
+import { cn } from "@packages/utils";
 import type { ChangeEventHandler, TextareaHTMLAttributes } from "react";
 import styles from "./Input.module.css";
 
@@ -18,7 +19,7 @@ const Input = ({
   ...props
 }: InputProps) => {
   return (
-    <div className={[styles.wrapper, className].filter(Boolean).join(" ")}>
+    <div className={cn(styles.wrapper, className)}>
       <textarea
         className={styles.textarea}
         value={value}

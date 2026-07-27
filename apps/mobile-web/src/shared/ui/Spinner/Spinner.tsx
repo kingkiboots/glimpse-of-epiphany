@@ -1,3 +1,4 @@
+import { cn } from '@packages/utils'
 import type { CSSProperties, HTMLAttributes } from 'react'
 import styles from './Spinner.module.css'
 
@@ -10,7 +11,7 @@ const Spinner = ({ size = 48, className, style, ...props }: SpinnerProps) => {
     <div
       role="status"
       aria-label="로딩 중"
-      className={[styles.spinner, className].filter(Boolean).join(' ')}
+      className={cn(styles.spinner, className)}
       style={{ ...style, '--spinner-size': `${size}px` } as CSSProperties}
       {...props}
     />

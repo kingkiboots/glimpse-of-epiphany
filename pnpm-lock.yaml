@@ -20,6 +20,9 @@ importers:
       '@fontsource/noto-serif-kr':
         specifier: ^5.3.0
         version: 5.3.0
+      '@packages/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@tanstack/react-router':
         specifier: ^1.170.18
         version: 1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -157,6 +160,15 @@ importers:
       typescript-eslint:
         specifier: ^8.62.0
         version: 8.65.0(eslint@10.7.0(jiti@2.7.0))(typescript@6.0.3)
+
+  packages/utils:
+    devDependencies:
+      '@packages/config':
+        specifier: workspace:*
+        version: link:../config
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
 
 packages:
 

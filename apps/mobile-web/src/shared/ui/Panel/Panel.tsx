@@ -1,4 +1,5 @@
 import { GLASS_EFFECT, RADIUS } from "@/shared/consts";
+import { cn } from "@packages/utils";
 import LiquidGlass from "liquid-glass-react";
 import type { ComponentProps, ReactNode } from "react";
 import styles from "./Panel.module.css";
@@ -33,7 +34,7 @@ const Panel = ({
         {...GLASS_EFFECT}
         cornerRadius={RADIUS[radius]}
         padding={padding}
-        className={[styles.panel, className].filter(Boolean).join(" ")}
+        className={cn(styles.panel, className)}
         style={{
           width,
           height,

@@ -1,3 +1,4 @@
+import { cn } from "@packages/utils";
 import type { ReactNode } from "react";
 import styles from "./ScreenBackground.module.css";
 
@@ -16,7 +17,7 @@ const ScreenBackground = ({
 }: ScreenBackgroundProps) => {
   return (
     <div
-      className={[styles.screen, className].filter(Boolean).join(" ")}
+      className={cn(styles.screen, className)}
       style={
         backgroundImageUrl
           ? { backgroundImage: `url(${backgroundImageUrl})` }

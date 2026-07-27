@@ -2,6 +2,7 @@ import type { ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.css";
 import LiquidGlass from "liquid-glass-react";
 import { GLASS_EFFECT, RADIUS } from "@/shared/consts";
+import { cn } from "@packages/utils";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -10,7 +11,7 @@ const Button = ({ className, children, disabled, ...props }: ButtonProps) => {
     <button
       type="button"
       disabled={disabled}
-      className={[styles.root, className].filter(Boolean).join(" ")}
+      className={cn(styles.root, className)}
       {...props}
     >
       <LiquidGlass

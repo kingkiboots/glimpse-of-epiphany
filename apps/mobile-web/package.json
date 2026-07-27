@@ -15,6 +15,7 @@
   "dependencies": {
     "@fontsource/diphylleia": "^5.3.0",
     "@fontsource/noto-serif-kr": "^5.3.0",
+    "@packages/utils": "workspace:*",
     "@tanstack/react-router": "^1.170.18",
     "liquid-glass-react": "^1.1.1",
     "react": "^19.2.7",

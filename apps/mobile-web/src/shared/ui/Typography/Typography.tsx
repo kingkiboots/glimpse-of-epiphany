@@ -1,3 +1,4 @@
+import { cn } from "@packages/utils";
 import type { ElementType, HTMLAttributes } from "react";
 import styles from "../../styles/typography.module.css";
 
@@ -34,7 +35,7 @@ const Typography = ({
 
   return (
     <Tag
-      className={[styles[variant], className].filter(Boolean).join(" ")}
+      className={cn(styles[variant], className)}
       {...props}
     >
       {children}
