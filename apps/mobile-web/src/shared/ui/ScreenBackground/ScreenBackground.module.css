@@ -6,6 +6,10 @@
   background-size: cover;
   background-position: center;
   color: var(--color-text);
+
+  /* Safe Area */
+  padding-top: calc(env(safe-area-inset-top));
+  padding-bottom: calc(env(safe-area-inset-bottom));
 }
 
 .overlay {
