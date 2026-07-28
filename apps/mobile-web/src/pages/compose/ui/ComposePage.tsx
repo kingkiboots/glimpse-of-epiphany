@@ -47,7 +47,11 @@ const ComposePage = () => {
         <p id="cta-caption" className={styles.ctaCaption}>
           *내용은 공유되지 않습니다.
         </p>
-        <Button aria-describedby="cta-caption" onClick={handleSubmit}>
+        <Button
+          aria-describedby="cta-caption"
+          onClick={handleSubmit}
+          disabled={file === null}
+        >
           작성 완료
         </Button>
       </div>
