@@ -1,12 +1,12 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import Button from "@/shared/ui/Button";
-import styles from "./ErrorPage.module.css";
+import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
 import {
   DEFAULT_ERROR_MESSAGE,
   ERROR_TYPES,
   ROUTE_PATHS,
 } from "@/shared/consts";
-import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
+import Button from "@/shared/ui/Button";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import styles from "./ErrorPage.module.css";
 
 const ErrorPage = () => {
   const { book, chapter, verse, text } = useBibleVerse();
