@@ -1,9 +1,5 @@
 import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
-import {
-  DEFAULT_ERROR_MESSAGE,
-  ERROR_TYPES,
-  ROUTE_PATHS,
-} from "@/shared/consts";
+import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
 import { useNavigate } from "@tanstack/react-router";
 import styles from "./CompletePage.module.css";
