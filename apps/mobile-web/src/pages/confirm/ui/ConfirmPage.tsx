@@ -1,10 +1,10 @@
+import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
 import Panel from "@/shared/ui/Panel";
 import { getCurrentDate } from "@packages/utils";
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import styles from "./ConfirmPage.module.css";
-import { ERROR_TYPES, ROUTE_PATHS } from "@/shared/consts";
 
 type ConfirmPageProps = {
   photoUrl?: string | null;
