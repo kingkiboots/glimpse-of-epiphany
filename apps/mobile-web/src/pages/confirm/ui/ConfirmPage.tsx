@@ -22,6 +22,10 @@ const ConfirmPage = ({
   const router = useRouter();
   const canGoBack = useCanGoBack();
 
+  const handleSubmitClick = () => {
+    navigate({ to: ROUTE_PATHS.complete });
+  };
+
   const handlePrevStepClick = () => {
     if (!canGoBack) {
       return;
@@ -74,7 +78,7 @@ const ConfirmPage = ({
           *내용은 공유되지 않습니다.
         </p>
         <div className={styles.ctaButtonGroup}>
-          <Button aria-describedby="cta-caption" onClick={() => {}}>
+          <Button aria-describedby="cta-caption" onClick={handleSubmitClick}>
             이미지 전시하기
           </Button>
           {/* STUB - 이 기능은 없어짐 */}

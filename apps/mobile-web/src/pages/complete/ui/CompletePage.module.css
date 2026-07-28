@@ -1,0 +1,55 @@
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  /* flex item 기본 min-height:auto는 콘텐츠가 넘칠 때 축소 동작이 브라우저마다 달라진다 */
+  min-height: 0;
+}
+
+.title {
+  composes: title from "@/shared/styles/typography.module.css";
+}
+
+.body {
+  composes: body from "@/shared/styles/typography.module.css";
+}
+
+.ctaArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.verse {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1;
+  /* Safari 렌더링 버그 해결 */
+  transform: translateZ(0);
+}
+
+.verseReference {
+  composes: body from "@/shared/styles/typography.module.css";
+  text-shadow: var(--shadow-text-strong);
+}
+
+.verseText {
+  composes: body from "@/shared/styles/typography.module.css";
+  line-height: 1.6;
+  white-space: pre-wrap;
+  text-shadow: var(--shadow-text-strong);
+}
