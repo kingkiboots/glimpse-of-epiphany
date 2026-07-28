@@ -3,4 +3,5 @@ export const ROUTE_PATHS = {
   preparing: "/preparing",
   compose: "/compose",
   confirm: "/confirm",
+  error: "/error",
 } as const;

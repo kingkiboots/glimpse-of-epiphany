@@ -1,9 +1,10 @@
 import Button from "@/shared/ui/Button";
 import Panel from "@/shared/ui/Panel";
 import { getCurrentDate } from "@packages/utils";
-import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import styles from "./ConfirmPage.module.css";
+import { ERROR_TYPES, ROUTE_PATHS } from "@/shared/consts";
 
 type ConfirmPageProps = {
   photoUrl?: string | null;
@@ -15,6 +16,8 @@ const ConfirmPage = ({
   message = `감사한 날이었다~~\n너무 좋다~~~~\n행복하고 하나님 너무 좋다~~~~\n조금 안감사했지만 돌아보니 감사하다`,
 }: ConfirmPageProps) => {
   const [currentDate] = useState(getCurrentDate);
+
+  const navigate = useNavigate();
 
   const router = useRouter();
   const canGoBack = useCanGoBack();
@@ -76,6 +79,27 @@ const ConfirmPage = ({
           </Button>
           {/* STUB - 이 기능은 없어짐 */}
           {/* <Button onClick={() => {}}>저장하기</Button> */}
+          <Button
+            onClick={() => {
+              navigate({
+                to: ROUTE_PATHS.error,
+              });
+            }}
+          >
+            테스트: 일반 에러
+          </Button>
+          <Button
+            onClick={() => {
+              navigate({
+                to: ROUTE_PATHS.error,
+                search: {
+                  type: ERROR_TYPES["upload-failed"].name,
+                },
+              });
+            }}
+          >
+            테스트: 업로드 에러
+          </Button>
           <Button onClick={handlePrevStepClick}>이전으로</Button>
         </div>
       </div>
