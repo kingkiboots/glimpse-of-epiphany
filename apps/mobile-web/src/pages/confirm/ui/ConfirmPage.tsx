@@ -79,27 +79,6 @@ const ConfirmPage = ({
           </Button>
           {/* STUB - 이 기능은 없어짐 */}
           {/* <Button onClick={() => {}}>저장하기</Button> */}
-          <Button
-            onClick={() => {
-              navigate({
-                to: ROUTE_PATHS.error,
-              });
-            }}
-          >
-            테스트: 일반 에러
-          </Button>
-          <Button
-            onClick={() => {
-              navigate({
-                to: ROUTE_PATHS.error,
-                search: {
-                  type: ERROR_TYPES["upload-failed"].name,
-                },
-              });
-            }}
-          >
-            테스트: 업로드 에러
-          </Button>
           <Button onClick={handlePrevStepClick}>이전으로</Button>
         </div>
       </div>
