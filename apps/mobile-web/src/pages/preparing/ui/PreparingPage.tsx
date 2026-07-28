@@ -1,13 +1,12 @@
-import { getRandomBibleVerse } from "@/features/bible-verse/consts";
-import Spinner from "@/shared/ui/Spinner";
-import { useEffect, useState } from "react";
-import styles from "./PreparingPage.module.css";
-import { useNavigate } from "@tanstack/react-router";
 import { ROUTE_PATHS } from "@/shared/consts";
+import Spinner from "@/shared/ui/Spinner";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import styles from "./PreparingPage.module.css";
+import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
 
 const PreparingPage = () => {
-  const [bibleVerse] = useState(getRandomBibleVerse);
-  const { book, chapter, verse, text } = bibleVerse;
+  const { book, chapter, verse, text } = useBibleVerse();
 
   const navigate = useNavigate();
 
