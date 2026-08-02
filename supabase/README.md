@@ -1,7 +1,9 @@
 # Supabase
 
-`mobile-web`과 `projector-web`이 공유하는 단일 Supabase 프로젝트의 스키마를 관리합니다.
-클라이언트 코드는 `packages/api`에 있습니다.
+`mobile-web`, `projector-web`, `admin-web`이 공유하는 단일 Supabase 프로젝트의 스키마를 관리합니다.
+클라이언트 코드는 `packages/api`, 환경변수는 `packages/env`에 있습니다.
+
+세팅 중에 막히면 아래 [문제 해결](#문제-해결)을 먼저 보세요.
 
 ## 처음 세팅하기
 
@@ -39,9 +41,16 @@ cp .env.example .env   # 레포 루트에서
 
 ### 4. 관리자 계정
 
-대시보드 > Authentication > Users > **Add user**로 계정 하나를 만듭니다.
-"Auto Confirm User"를 켜야 메일 인증 없이 바로 로그인됩니다.
-회원가입 경로는 앱에 두지 않았으므로, Authentication > Providers에서 **Email 가입은 꺼두세요.**
+`admin-web`에는 **가입 화면이 없습니다.** 계정은 대시보드에서 직접 발급합니다.
+
+1. Authentication > Users > **Add user** > Create new user
+2. 이메일과 비밀번호를 넣고 **"Auto Confirm User"를 켭니다.** 끄면 메일 인증을 기다리느라 로그인되지 않습니다.
+3. Authentication > Sign In / Providers > Email 에서 **가입 허용을 꺼둡니다.**
+
+3번이 중요합니다. RLS상 전시물 삭제 권한이 `authenticated` 롤에 열려 있어서, 가입이 열려 있으면
+누구나 계정을 만들어 사진을 지울 수 있습니다. 앱 코드로는 막을 수 없고 이 설정으로만 닫힙니다.
+
+같은 안내가 로그인 화면의 `(?)` 버튼에도 들어 있습니다.
 
 ### 5. 파일 정리 함수 배포
 
@@ -62,9 +71,55 @@ cp .env.example .env   # 레포 루트에서
 
 코드 변경 없이 다시 배포하려면 Actions 탭에서 이 워크플로를 수동 실행하면 됩니다.
 
-**그리고 배포와 별개로 스케줄 등록이 필요합니다.** 대시보드 > Integrations > **Cron**에서
-이 함수를 **1분마다** 호출하도록 등록하세요. 이건 자동화되지 않는 1회성 설정입니다.
-등록하지 않으면 화면에서는 5분 뒤 사라지지만 Storage 파일이 계속 쌓입니다.
+**그리고 배포와 별개로 스케줄 등록이 필요합니다.** 등록하지 않으면 화면에서는 5분 뒤
+사라지지만 Storage 파일이 계속 쌓입니다. 자동화되지 않는 1회성 설정입니다.
+
+대시보드 > Integrations > **Cron** > Create job 에서 아래처럼 만듭니다.
+
+| 항목 | 값 |
+| --- | --- |
+| 이름 | `cleanup-orphan-images` |
+| 스케줄 | `*/5 * * * *` (5분마다) |
+| 유형 | Supabase Edge Function → `cleanup-orphan-images`, POST |
+| 타임아웃 | `30000` ms |
+| HTTP 헤더 | `Authorization: Bearer <anon 키>` |
+
+유형 선택지에 Edge Function이 없다면 `pg_net`이 꺼져 있는 것입니다.
+`migrations/20260803000000_enable_pg_net.sql`을 실행하거나 Database > Extensions에서 켜주세요.
+
+**`Authorization` 헤더에는 anon 키를 넣습니다.** Edge Function은 기본적으로 JWT를 검증하므로
+값이 없거나 틀리면 매번 401로 실패합니다. 크론은 도는데 아무것도 지워지지 않는, 알아채기 어려운
+상태가 됩니다. 붙여넣을 때 줄바꿈이 끼지 않게 주의하세요.
+
+`service_role` 키를 쓰지 마세요. 되긴 하지만 이득이 없고 손해만 있습니다. 이 헤더는 JWT 검증을
+통과하는 용도일 뿐이고, 함수가 실제로 쓰는 권한은 런타임이 주입하는 `SUPABASE_SERVICE_ROLE_KEY`로
+따로 얻습니다. 반면 크론 정의는 `cron.job` 테이블에 문자열로 저장되므로, DB를 볼 수 있는 사람
+누구나 읽을 수 있는 자리에 최고 권한 키를 두게 됩니다. anon 키는 어차피 공개되는 값이라 무해합니다.
+
+anon 키가 `sb_publishable_`로 시작하는 신형 포맷이면 JWT가 아니라 검증을 통과하지 못할 수 있습니다.
+401이 나면 Project Settings > API Keys 아래 **Legacy API keys** 섹션의 `anon public`
+(`eyJ`로 시작하는 값)으로 바꿔보세요.
+
+**타임아웃은 30초로 둡니다.** 정리가 정상적으로 돌면 1초 안에 끝나지만, 밀린 파일이 한꺼번에
+걸리는 첫 실행을 위한 여유입니다. 기준은 **타임아웃 < 실행 주기** — 주기(5분)보다 길면 앞 실행이
+끝나기 전에 다음 실행이 시작돼 요청이 겹쳐 쌓입니다. 중간에 잘려도 함수는 매번 처음부터 다시
+훑는 방식이라 다음 실행이 남은 것을 이어서 지웁니다.
+
+**주기를 1분이 아니라 5분으로 둔 이유**는, 행 삭제(`delete-expired-exhibits`)가 이미 1분마다
+돌면서 "5분간만 전시된다"는 약속을 지키고 있기 때문입니다. 파일 정리는 그 뒤를 따라오는
+청소라서 늦어도 화면에 영향이 없습니다. 1분으로 두면 대부분 지울 것이 없는 헛수고만 늘어납니다.
+참고로 1분 주기여도 월 43,200회로 무료 한도(50만 회)의 9% 수준이라, 과금이 이유는 아닙니다.
+
+등록한 뒤 확인은 이렇게 합니다.
+
+```sql
+select jobname, schedule, active from cron.job;
+select jobname, status, start_time from cron.job_run_details order by start_time desc limit 10;
+```
+
+여기서 `succeeded`는 **SQL이 요청을 보냈다는 뜻이지 함수가 성공했다는 뜻이 아닙니다.**
+`net.http_post`는 응답을 기다리지 않습니다. 함수가 실제로 무엇을 했는지는
+Edge Functions > `cleanup-orphan-images` > **Logs**에서 `{"scanned":…,"deleted":…}`로 확인하세요.
 
 ### 6. 동작 확인
 
@@ -129,6 +184,63 @@ SUPABASE_PROJECT_ID=<project-ref> pnpm gen:db-types
 anon에게 삭제를 열면 URL을 아는 참가자 누구나 전체 전시물을 지울 수 있습니다.
 
 마이그레이션을 추가한 뒤에는 위 "타입 재생성"을 실행해 `packages/api`의 타입을 맞춰줍니다.
+
+## 문제 해결
+
+실제로 겪은 것들입니다. 증상으로 찾으세요.
+
+### DB 행은 사라지는데 Storage 파일이 그대로 쌓인다
+
+행 삭제와 파일 삭제는 **서로 다른 것이 담당**합니다. 행은 `delete-expired-exhibits` 크론이
+지우는데 이건 순수 SQL이라 마이그레이션을 실행한 순간부터 자동으로 돕니다. 반면 파일은
+`cleanup-orphan-images` Edge Function이 지우고, 이건 **배포와 크론 등록이 각각 필요**합니다.
+둘 중 하나라도 빠지면 정확히 이 증상이 납니다. 위 "5. 파일 정리 함수 배포"를 확인하세요.
+
+Storage 파일은 SQL로 지울 수 없어서 갈라놓은 구조입니다. `storage.objects`에서 행을 지워도
+실제 파일은 남습니다.
+
+이미 쌓인 파일은 Storage > `exhibit-images`에서 전체 선택 후 지우면 됩니다.
+DB에 대응하는 행이 없으니 아무도 참조하지 않는 파일들입니다.
+
+### 크론은 도는데 아무것도 지워지지 않는다
+
+`Authorization` 헤더 문제일 가능성이 큽니다. 401이 나도 `cron.job_run_details`에는
+`succeeded`로 찍히기 때문에 SQL 쪽만 보면 정상으로 보입니다.
+Edge Functions > Logs에서 실제 응답을 확인하세요.
+
+### Cron UI에서 "Supabase Edge Function" 유형을 고를 수 없다
+
+`pg_net` 확장이 꺼져 있습니다. 크론이 함수를 호출할 때 내부적으로 `net.http_post`를 쓰기 때문입니다.
+
+```sql
+create extension if not exists pg_net;
+```
+
+### GitHub Actions가 "Access token not provided"로 실패한다
+
+시크릿이 비어서 전달된 것입니다. GitHub에는 이름이 비슷한 저장소가 세 군데 있고 서로 다릅니다.
+
+- **Repository secrets** — 모든 워크플로가 `secrets.X`로 바로 읽습니다. **여기에 넣으세요.**
+- **Environment secrets** — job이 `environment: <이름>`을 선언해야만 읽힙니다. 없으면 조용히 빈 값이 됩니다.
+- **Variables 탭** — `secrets.X`가 아니라 `vars.X`로 읽어야 합니다.
+
+CLI 메시지의 "environment variable"은 GitHub의 Environment와 무관한, 러너 셸의 환경변수를 말합니다.
+워크플로는 이미 그것을 설정하고 있고, 채워줄 시크릿이 비어 있는 것이 원인입니다.
+
+### 배포한 앱에서 `Failed to execute 'set' on 'Headers': Invalid value`
+
+anon 키 **중간에 줄바꿈**이 들어간 경우입니다. 이 값은 매 요청의 HTTP 헤더로 들어가는데,
+대시보드에 긴 키를 붙여넣다 줄이 접히면 이렇게 됩니다. 앱이 화면을 띄우는 동안에는 요청이 없어서
+첫 업로드에서야 드러납니다. 값 앞뒤의 공백이나 개행은 명세상 잘려나가므로 원인이 아닙니다.
+
+고친 뒤 **반드시 재배포하세요.** `VITE_` 값은 빌드 시점에 번들에 박히므로 환경변수만 고치면
+이미 배포된 빌드는 그대로입니다.
+
+### 앱에서 새로고침하면 404 (Supabase 아님)
+
+`mobile-web`은 브라우저에서 라우팅하는 SPA라 `/compose` 같은 경로에 해당하는 파일이 서버에 없습니다.
+[`apps/mobile-web/vercel.json`](../apps/mobile-web/vercel.json)의 rewrite가 이를 처리합니다.
+Vercel 프로젝트의 Root Directory가 `apps/mobile-web`이어야 이 파일이 읽힙니다.
 
 ## 보안
 

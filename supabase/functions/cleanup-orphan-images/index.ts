@@ -10,8 +10,9 @@
 //
 // 배포:   main에 머지하면 .github/workflows/deploy-edge-functions.yml 이 자동으로 배포한다.
 //         (대시보드에서 직접 편집하면 이 파일과 실제 배포본이 갈라지므로 하지 말 것)
-// 스케줄: 대시보드 > Integrations > Cron 에서 1분마다 이 함수를 호출하도록 등록.
-//         이건 자동화되지 않는 1회성 설정이다.
+// 스케줄: 대시보드 > Integrations > Cron 에서 5분마다 이 함수를 호출하도록 등록.
+//         이건 자동화되지 않는 1회성 설정이다. (pg_net 확장이 켜져 있어야 한다)
+//         행 삭제는 1분마다 도는 SQL 크론이 따로 보장하므로 파일 정리는 늦어도 된다.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
