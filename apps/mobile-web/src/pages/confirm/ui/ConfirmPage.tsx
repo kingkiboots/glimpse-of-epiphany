@@ -3,36 +3,44 @@ import Button from "@/shared/ui/Button";
 import Panel from "@/shared/ui/Panel";
 import { getCurrentDate } from "@packages/utils";
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useExhibitDraft } from "@/entities/exhibit";
+import { useSubmitExhibit } from "@/features/submit-exhibit";
 import styles from "./ConfirmPage.module.css";
 
-type ConfirmPageProps = {
-  photoUrl?: string | null;
-  message?: string;
-};
-
-const ConfirmPage = ({
-  photoUrl = null,
-  message = `감사한 날이었다~~\n너무 좋다~~~~\n행복하고 하나님 너무 좋다~~~~\n조금 안감사했지만 돌아보니 감사하다`,
-}: ConfirmPageProps) => {
+const ConfirmPage = () => {
   const [currentDate] = useState(getCurrentDate);
+  const { file, message, previewUrl } = useExhibitDraft();
+  const { submit, isSubmitting } = useSubmitExhibit();
 
   const navigate = useNavigate();
 
   const router = useRouter();
   const canGoBack = useCanGoBack();
 
+  // 새로고침 등으로 작성 내용이 사라진 채 이 화면에 들어온 경우 작성 화면으로 되돌린다.
+  useEffect(() => {
+    if (!file) {
+      navigate({ to: ROUTE_PATHS.compose, replace: true });
+    }
+  }, [file, navigate]);
+
   const handleSubmitClick = () => {
-    navigate({ to: ROUTE_PATHS.complete });
+    /*void*/ submit();
   };
 
   const handlePrevStepClick = () => {
     if (!canGoBack) {
+      navigate({ to: ROUTE_PATHS.compose });
       return;
     }
 
     router.history.back();
   };
+
+  if (!file) {
+    return null;
+  }
 
   return (
     <div className={styles.content}>
@@ -51,9 +59,9 @@ const ConfirmPage = ({
         >
           <div className={styles.previewArea}>
             <div className={styles.imagePreview}>
-              {photoUrl ? (
+              {previewUrl ? (
                 <img
-                  src={photoUrl}
+                  src={previewUrl}
                   alt="선택한 사진"
                   className={styles.previewImage}
                 />
@@ -78,12 +86,18 @@ const ConfirmPage = ({
           *내용은 공유되지 않습니다.
         </p>
         <div className={styles.ctaButtonGroup}>
-          <Button aria-describedby="cta-caption" onClick={handleSubmitClick}>
-            이미지 전시하기
+          <Button
+            aria-describedby="cta-caption"
+            onClick={handleSubmitClick}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "전시하는 중..." : "이미지 전시하기"}
           </Button>
           {/* STUB - 이 기능은 없어짐 */}
           {/* <Button onClick={() => {}}>저장하기</Button> */}
-          <Button onClick={handlePrevStepClick}>이전으로</Button>
+          <Button onClick={handlePrevStepClick} disabled={isSubmitting}>
+            이전으로
+          </Button>
         </div>
       </div>
     </div>
