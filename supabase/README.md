@@ -3,33 +3,64 @@
 `mobile-web`과 `projector-web`이 공유하는 단일 Supabase 프로젝트의 스키마를 관리합니다.
 클라이언트 코드는 `packages/api`에 있습니다.
 
-## 스키마 적용
+## 처음 세팅하기
 
-Supabase CLI가 없다면 대시보드에서 붙여넣는 방식이 가장 빠릅니다.
+`supabase` CLI는 루트 devDependency로 설치되어 있어 `pnpm exec supabase ...` 로 바로 씁니다.
+전역 설치는 필요 없습니다.
 
-1. [supabase.com](https://supabase.com/dashboard)에서 프로젝트를 만듭니다. (region은 `Northeast Asia (Seoul)` 권장)
-2. 대시보드 > SQL Editor 에서 `migrations/` 안의 `.sql` 파일을 파일명 순서대로 실행합니다.
-3. 프로젝트 설정 > Data API 에서 **Project URL**과 **anon public key**를 복사합니다.
-4. 레포 루트의 `.env.example`을 `.env`로 복사한 뒤 위 값을 채웁니다.
-   두 앱의 `vite.config.ts`가 `envDir`을 루트로 잡고 있어 `.env` 한 벌을 공유합니다.
+### 1. 프로젝트 생성
 
-CLI를 쓴다면 (`supabase`는 `@packages/api`의 devDependency로 설치되어 있습니다):
+[supabase.com/dashboard](https://supabase.com/dashboard)에서 프로젝트를 만듭니다.
+region은 `Northeast Asia (Seoul)`을 권장합니다. 이때 정한 **DB 비밀번호**는 아래 `db push`에 필요하니 적어두세요.
+
+### 2. 스키마 적용
+
+**대시보드로 (가장 빠름)** — SQL Editor에서 `migrations/` 안의 `.sql`을 파일명 순서대로 붙여넣고 실행합니다.
+마이그레이션은 전부 멱등(`if not exists` / `drop policy if exists`)하게 작성되어 있어 여러 번 실행해도 안전합니다.
+
+**CLI로** — 로그인하면 브라우저가 열립니다.
 
 ```bash
+pnpm exec supabase login
 pnpm exec supabase link --project-ref <project-ref>
 pnpm exec supabase db push
 ```
 
-## 타입 재생성
+### 3. 환경변수
 
-스키마를 바꾼 뒤에는 아래 명령으로 `packages/api/src/database.types.ts`를 다시 뽑습니다.
-직접 수정하지 마세요. 파생 타입이 필요하면 `packages/api/src/types.ts`에 작성합니다.
+프로젝트 설정 > Data API 에서 **Project URL**과 **anon(publishable) key**를 복사합니다.
 
 ```bash
+cp .env.example .env   # 레포 루트에서
+```
+
+두 앱의 `vite.config.ts`가 `envDir`을 루트로 잡고 있어 `.env` 한 벌을 공유합니다.
+`service_role` 키를 넣으면 앱이 실행 시점에 예외를 던지니 주의하세요 (아래 "보안" 참고).
+
+### 4. 동작 확인
+
+```bash
+pnpm --filter mobile-web dev          # 데스크톱 브라우저
+pnpm --filter mobile-web dev:host     # 같은 와이파이의 실제 폰에서 접속
+```
+
+사진 선택 → 작성 완료 → 이미지 전시하기 까지 진행한 뒤,
+대시보드의 Table Editor(`exhibits`)와 Storage(`exhibit-images`)에 각각 행과 webp 파일이 생겼는지 봅니다.
+
+## 타입 재생성
+
+`packages/api/src/database.types.ts`는 생성물입니다. 직접 수정하지 마세요.
+파생 타입이 필요하면 `packages/api/src/types.ts`에 작성합니다.
+
+```bash
+pnpm exec supabase login              # 최초 1회
 SUPABASE_PROJECT_ID=<project-ref> pnpm gen:db-types
 ```
 
 `.env`에 `SUPABASE_PROJECT_ID`를 넣어뒀다면 `set -a; source .env; set +a` 후 `pnpm gen:db-types`만 실행해도 됩니다.
+
+현재 커밋된 타입은 `migrations/`의 DDL과 이미 일치하므로, **처음 세팅할 때는 실행하지 않아도 됩니다.**
+스키마를 바꾼 뒤에 돌리세요.
 
 ## 스키마 요약
 

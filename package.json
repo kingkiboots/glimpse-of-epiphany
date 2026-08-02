@@ -12,10 +12,11 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "storybook": "turbo run storybook",
-    "gen:db-types": "pnpm --filter @packages/api gen:db-types",
+    "gen:db-types": "supabase gen types typescript --project-id \"${SUPABASE_PROJECT_ID:?set SUPABASE_PROJECT_ID (see .env.example)}\" --schema public > packages/api/src/database.types.tmp && mv packages/api/src/database.types.tmp packages/api/src/database.types.ts || rm -f packages/api/src/database.types.tmp",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
+    "supabase": "^2.63.1",
     "turbo": "^2.10.5"
   }
 }
