@@ -36,11 +36,7 @@ const ComposePage = () => {
           어떤 감사를 드릴 수 있었나요?
         </label>
         <Panel radius="panel" padding="10px 12px" width={272} height={134}>
-          <Input
-            id={id}
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-          />
+          <Input id={id} value={message} onChange={setMessage} />
         </Panel>
       </div>
       <div className={styles.ctaArea}>

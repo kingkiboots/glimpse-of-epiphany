@@ -40,7 +40,7 @@ export const Default: Story = {
         <Input
           {...args}
           value={value}
-          onChange={(event) => setValue(event.target.value)}
+          onChange={setValue}
         />
       </Panel>
     );
@@ -55,7 +55,7 @@ export const Filled: Story = {
         <Input
           {...args}
           value={value}
-          onChange={(event) => setValue(event.target.value)}
+          onChange={setValue}
         />
       </Panel>
     );
