@@ -1,0 +1,38 @@
+:root {
+  --bg: #16171a;
+  --surface: #1e2024;
+  --surface-raised: #26282d;
+  --border: #33363c;
+  --text: #e8e9ec;
+  --text-muted: #9a9ea7;
+  --accent: #3b6fd4;
+  --danger: #e5766b;
+  --danger-surface: rgb(229 118 107 / 12%);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo",
+    "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+}
