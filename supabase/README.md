@@ -37,11 +37,30 @@ cp .env.example .env   # 레포 루트에서
 두 앱의 `vite.config.ts`가 `envDir`을 루트로 잡고 있어 `.env` 한 벌을 공유합니다.
 `service_role` 키를 넣으면 앱이 실행 시점에 예외를 던지니 주의하세요 (아래 "보안" 참고).
 
-### 4. 동작 확인
+### 4. 관리자 계정
+
+대시보드 > Authentication > Users > **Add user**로 계정 하나를 만듭니다.
+"Auto Confirm User"를 켜야 메일 인증 없이 바로 로그인됩니다.
+회원가입 경로는 앱에 두지 않았으므로, Authentication > Providers에서 **Email 가입은 꺼두세요.**
+
+### 5. 파일 정리 함수 배포
+
+행이 사라진 뒤 남는 Storage 파일을 지우는 Edge Function입니다.
+`SUPABASE_URL`과 `SUPABASE_SERVICE_ROLE_KEY`는 런타임이 자동으로 주입하므로 따로 설정할 게 없습니다.
+
+```bash
+pnpm exec supabase functions deploy cleanup-orphan-images
+```
+
+배포 후 대시보드 > Integrations > **Cron**에서 이 함수를 **1분마다** 호출하도록 등록합니다.
+등록하지 않으면 화면에서는 5분 뒤 사라지지만 CDN 파일이 계속 쌓입니다.
+
+### 6. 동작 확인
 
 ```bash
 pnpm --filter mobile-web dev          # 데스크톱 브라우저
 pnpm --filter mobile-web dev:host     # 같은 와이파이의 실제 폰에서 접속
+pnpm --filter admin-web dev           # 운영자 화면
 ```
 
 사진 선택 → 작성 완료 → 이미지 전시하기 까지 진행한 뒤,
@@ -68,16 +87,35 @@ SUPABASE_PROJECT_ID=<project-ref> pnpm gen:db-types
 | --- | --- | --- |
 | 테이블 | `public.exhibits` | 사진 경로 + 감사 메시지 한 건 |
 | 버킷 | `exhibit-images` | 공개 버킷. webp만 허용, 파일당 1MB 제한 |
+| 크론 | `delete-expired-exhibits` | 1분마다 5분 지난 행을 삭제 |
+| 함수 | `cleanup-orphan-images` | 행이 없는 Storage 파일을 삭제 (Edge Function) |
 
-`exhibits`는 Realtime 퍼블리케이션에 등록되어 있어 프로젝터가 INSERT를 구독할 수 있습니다.
+`exhibits`는 Realtime 퍼블리케이션에 등록되어 있어 프로젝터가 INSERT와 DELETE를 구독합니다.
+
+### 삭제 흐름
+
+**이 테이블이 단일 진실 공급원이고, CDN 파일이 그 뒤를 따라옵니다.** 행이 사라지는 경로는 둘입니다.
+
+1. 5분이 지나 `delete-expired-exhibits` 크론이 지움 (순수 SQL)
+2. 운영자가 `admin-web`에서 지움
+
+어느 쪽이든 결과는 "행이 없어졌다"로 같고, 남은 파일은 `cleanup-orphan-images`가 정리합니다.
+삭제는 하드킬이라 되돌릴 수 없습니다. 소프트 삭제 플래그는 두지 않았습니다.
+
+행 삭제를 Edge Function이 아니라 SQL 크론에 맡긴 이유는, 함수가 배포되지 않았거나 실패해도
+"5분간만 전시된다"는 참가자와의 약속이 깨지지 않아야 하기 때문입니다.
+함수가 죽으면 파일 정리만 밀리고 화면에서 사라지는 것은 보장됩니다.
 
 ### RLS 요약
 
-anon 키만 사용하므로 권한은 전부 RLS로 통제합니다.
+참가자와 프로젝터는 anon 키만, 운영자는 로그인한 세션을 씁니다.
 
-- 읽기: `is_hidden = false`인 행만 (테이블), 버킷 전체 (Storage)
-- 쓰기: INSERT만 허용. `is_hidden = true`로는 만들 수 없습니다.
-- 수정/삭제: anon에게 열어주지 않았습니다. 부적절한 게시물은 운영자가 대시보드에서 `is_hidden`을 `true`로 바꿔 화면에서 내립니다.
+- 읽기: 전체 허용 (테이블, Storage 모두)
+- 생성: anon도 INSERT 가능. 이게 참가자 업로드 경로입니다.
+- 삭제: 테이블은 `authenticated`만. Storage는 아무에게도 열지 않았고, Edge Function이 RLS를 우회하는 `service_role`로 처리합니다.
+- 수정: 아무에게도 열지 않았습니다. 한 번 올린 전시물은 수정 대상이 아닙니다.
+
+anon에게 삭제를 열면 URL을 아는 참가자 누구나 전체 전시물을 지울 수 있습니다.
 
 마이그레이션을 추가한 뒤에는 위 "타입 재생성"을 실행해 `packages/api`의 타입을 맞춰줍니다.
 

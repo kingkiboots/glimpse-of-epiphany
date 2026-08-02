@@ -17,6 +17,7 @@
 
 - `apps/mobile-web`: 모바일 업로드 전용 SPA (입력 폼 위주)
 - `apps/projector-web`: 빔프로젝터 전용 뷰어 SPA (Websocket 기반 실시간 수신 + GSAP 렌더링)
+- `apps/admin-web`: 운영자용 전시물 관리 SPA (Supabase Auth 로그인 + 사진 하드 삭제)
 - `packages/config`: ESLint, TSConfig, Vite 공통 설정 공유 패키지
 - `packages/api`: Supabase Singleton 클라이언트 및 API 공통 로직
 - _참고: 두 앱의 UI 성격이 매우 다르므로 `packages/ui`는 사용하지 않으며, 각 앱의 `shared/ui`에서 개별 관리합니다._
