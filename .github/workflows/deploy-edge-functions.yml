@@ -1,0 +1,41 @@
+# supabase/functions 가 바뀌면 Supabase에 자동 배포한다.
+#
+# 로컬에 CLI를 두지 않으면서 레포와 실제 배포본이 어긋나지 않게 하는 것이 목적이다.
+# 대시보드에서 직접 편집하면 "레포만 고치고 배포를 잊는" 상황이 생기는데,
+# 이 워크플로가 있으면 main에 머지하는 것으로 배포가 끝난다.
+#
+# 필요한 저장소 시크릿 (Settings > Secrets and variables > Actions):
+#   SUPABASE_ACCESS_TOKEN  supabase.com/dashboard/account/tokens 에서 발급한 개인 액세스 토큰
+#   SUPABASE_PROJECT_ID    프로젝트 참조 문자열 (URL의 <project-ref>). 비밀은 아니지만 함께 시크릿으로 둔다
+name: Deploy Edge Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/functions/**"
+      - ".github/workflows/deploy-edge-functions.yml"
+  # 코드 변경 없이 다시 배포하고 싶을 때 Actions 탭에서 수동 실행
+  workflow_dispatch:
+
+# 연달아 머지해도 배포가 겹치지 않게 한다
+concurrency:
+  group: deploy-edge-functions
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # 슬러그를 지정하지 않으면 supabase/functions 아래 모든 함수를 배포한다.
+      # 나중에 함수가 늘어도 이 파일을 고칠 필요가 없다.
+      - name: Deploy functions
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase functions deploy --project-ref "${{ secrets.SUPABASE_PROJECT_ID }}"

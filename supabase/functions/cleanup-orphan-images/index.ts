@@ -8,8 +8,10 @@
 // 남기 때문에, service_role 키로 Storage API를 호출하는 이 함수가 필요하다.
 // service_role 키가 정당하게 쓰이는 유일한 자리다 (서버에서만 실행되므로).
 //
-// 배포:   pnpm exec supabase functions deploy cleanup-orphan-images
-// 스케줄: 대시보드 > Integrations > Cron 에서 1분마다 이 함수를 호출하도록 등록
+// 배포:   main에 머지하면 .github/workflows/deploy-edge-functions.yml 이 자동으로 배포한다.
+//         (대시보드에서 직접 편집하면 이 파일과 실제 배포본이 갈라지므로 하지 말 것)
+// 스케줄: 대시보드 > Integrations > Cron 에서 1분마다 이 함수를 호출하도록 등록.
+//         이건 자동화되지 않는 1회성 설정이다.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 

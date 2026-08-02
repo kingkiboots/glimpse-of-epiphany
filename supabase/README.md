@@ -48,12 +48,23 @@ cp .env.example .env   # 레포 루트에서
 행이 사라진 뒤 남는 Storage 파일을 지우는 Edge Function입니다.
 `SUPABASE_URL`과 `SUPABASE_SERVICE_ROLE_KEY`는 런타임이 자동으로 주입하므로 따로 설정할 게 없습니다.
 
-```bash
-pnpm exec supabase functions deploy cleanup-orphan-images
-```
+**배포는 GitHub Actions가 합니다.** `supabase/functions/**`가 바뀐 채로 `main`에 올라가면
+[`.github/workflows/deploy-edge-functions.yml`](../.github/workflows/deploy-edge-functions.yml)이
+자동으로 배포합니다. 로컬에 CLI를 설치하거나 대시보드에서 직접 편집할 필요가 없고,
+레포의 코드와 실제 배포본이 어긋나지 않습니다.
 
-배포 후 대시보드 > Integrations > **Cron**에서 이 함수를 **1분마다** 호출하도록 등록합니다.
-등록하지 않으면 화면에서는 5분 뒤 사라지지만 CDN 파일이 계속 쌓입니다.
+최초 1회만 저장소 시크릿 두 개를 등록하세요 (Settings > Secrets and variables > Actions).
+
+| 이름 | 값 |
+| --- | --- |
+| `SUPABASE_ACCESS_TOKEN` | [account/tokens](https://supabase.com/dashboard/account/tokens)에서 발급한 개인 액세스 토큰 |
+| `SUPABASE_PROJECT_ID` | 프로젝트 참조 문자열 (URL의 `<project-ref>`) |
+
+코드 변경 없이 다시 배포하려면 Actions 탭에서 이 워크플로를 수동 실행하면 됩니다.
+
+**그리고 배포와 별개로 스케줄 등록이 필요합니다.** 대시보드 > Integrations > **Cron**에서
+이 함수를 **1분마다** 호출하도록 등록하세요. 이건 자동화되지 않는 1회성 설정입니다.
+등록하지 않으면 화면에서는 5분 뒤 사라지지만 Storage 파일이 계속 쌓입니다.
 
 ### 6. 동작 확인
 
