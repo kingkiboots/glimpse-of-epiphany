@@ -1,0 +1,121 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.dialog {
+  max-width: 420px;
+  width: calc(100% - 32px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+
+.panel {
+  padding: 24px;
+}
+
+.title {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.body {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.body p {
+  margin: 0 0 12px;
+}
+
+.body ol,
+.body ul {
+  margin: 0 0 12px;
+  padding-left: 18px;
+}
+
+.body strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.body code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 12px;
+}
+
+/*
+ * 본문에서 한 단계 끌어올려 보여줄 안내 블록.
+ * 자식 마크업은 이 컴포넌트를 쓰는 쪽(page)이 작성하는데, CSS Module은 파일 단위로
+ * 스코프가 갈려 클래스명을 건네줄 수 없다. 그래서 data 속성으로 약속한다.
+ * `.body [data-callout]`가 `.body p`보다 명시도가 높아 기본 문단 스타일을 덮는다.
+ */
+.body [data-callout] {
+  margin: 12px 0;
+  padding: 6px 14px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.body [data-callout] a {
+  display: block;
+  margin-top: 6px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.body [data-callout] a:hover,
+.body [data-callout] a:focus-visible {
+  text-decoration: underline;
+}
+
+.close {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--text);
+}
