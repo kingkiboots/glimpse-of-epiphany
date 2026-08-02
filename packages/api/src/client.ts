@@ -27,9 +27,10 @@ export const getSupabaseClient = (): SupabaseClient<Database> => {
 
   client = createClient<Database>(url, anonKey, {
     auth: {
-      // 익명 접근만 사용하므로 세션을 저장하지 않는다.
-      persistSession: false,
-      autoRefreshToken: false,
+      // admin-web이 로그인 상태를 새로고침 후에도 유지해야 한다.
+      // 참가자·프로젝터는 로그인하지 않으므로 저장될 세션 자체가 없다.
+      persistSession: true,
+      autoRefreshToken: true,
     },
   });
 

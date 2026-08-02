@@ -22,21 +22,18 @@ export type Database = {
           created_at: string;
           id: string;
           image_path: string;
-          is_hidden: boolean;
           message: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
           image_path: string;
-          is_hidden?: boolean;
           message?: string;
         };
         Update: {
           created_at?: string;
           id?: string;
           image_path?: string;
-          is_hidden?: boolean;
           message?: string;
         };
         Relationships: [];
