@@ -132,7 +132,9 @@ anon에게 삭제를 열면 URL을 아는 참가자 누구나 전체 전시물�
 - `service_role` 키 — RLS를 통째로 우회합니다. 클라이언트 코드에는 어떤 이유로도 들어갈 일이 없습니다.
 - Personal Access Token — 계정 전체 권한입니다.
 
-이 둘에 `VITE_` 접두사를 붙이는 순간 번들에 실려 나갑니다. 실수를 막기 위해 `packages/api`가 클라이언트를 만들기 전에 키 종류를 검사하고(`src/assert-publishable-key.ts`), 비밀 키가 감지되면 즉시 예외를 던집니다.
+이 둘에 `VITE_` 접두사를 붙이는 순간 번들에 실려 나갑니다. 실수를 막기 위해 `packages/env`가 값을 읽을 때 키 종류를 검사하고(`src/assert-publishable-key.ts`), 비밀 키가 감지되면 즉시 예외를 던집니다.
+
+`packages/env`는 값에 섞인 공백·줄바꿈도 걷어냅니다(`src/sanitize-env-value.ts`). 대시보드에 긴 키를 붙여넣다 줄이 접히면, 이 값이 매 요청의 HTTP 헤더로 들어가기 때문에 첫 요청에서 `Failed to execute 'set' on 'Headers': Invalid value` 라는 정체불명의 에러만 남습니다.
 
 ### Supabase MCP를 쓰지 않는 이유
 

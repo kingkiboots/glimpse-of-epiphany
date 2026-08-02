@@ -1,15 +1,10 @@
 {
-  "name": "@packages/api",
+  "name": "@packages/env",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
-  },
-  "dependencies": {
-    "@packages/env": "workspace:*",
-    "@packages/utils": "workspace:*",
-    "@supabase/supabase-js": "^2.95.0"
   },
   "devDependencies": {
     "@packages/config": "workspace:*",

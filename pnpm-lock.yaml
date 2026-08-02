@@ -188,6 +188,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@packages/env':
+        specifier: workspace:*
+        version: link:../env
       '@packages/utils':
         specifier: workspace:*
         version: link:../utils
@@ -225,6 +228,18 @@ importers:
       typescript-eslint:
         specifier: ^8.62.0
         version: 8.65.0(eslint@10.7.0(jiti@2.7.0))(typescript@6.0.3)
+
+  packages/env:
+    devDependencies:
+      '@packages/config':
+        specifier: workspace:*
+        version: link:../config
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
+      vite:
+        specifier: ^8.1.1
+        version: 8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)
 
   packages/utils:
     devDependencies:

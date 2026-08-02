@@ -1,4 +1,4 @@
-export { getSupabaseClient, isSupabaseConfigured } from "./client";
+export { getSupabaseClient } from "./client";
 export {
   getCurrentSession,
   signInAdmin,
