@@ -1,11 +1,11 @@
-export { getSupabaseClient } from "./client";
+export { getSupabaseClient } from "./src/client";
 export {
   getCurrentSession,
   signInAdmin,
   signOutAdmin,
   subscribeToAuthState,
-} from "./auth";
-export type { Session } from "./auth";
+} from "./src/auth";
+export type { Session } from "./src/auth";
 export {
   EXHIBIT_IMAGE_BUCKET,
   EXHIBIT_TTL_MINUTES,
@@ -14,11 +14,11 @@ export {
   fetchExhibits,
   getExhibitImageUrl,
   subscribeToExhibits,
-} from "./exhibit";
+} from "./src/exhibit";
 export type {
   CreateExhibitInput,
   Exhibit,
   ExhibitSubscriptionHandlers,
-} from "./exhibit";
-export type { ExhibitInsert, ExhibitRow } from "./types";
-export type { Database, Json } from "./database.types";
+} from "./src/exhibit";
+export type { ExhibitInsert, ExhibitRow } from "./src/types";
+export type { Database, Json } from "./src/database.types";
