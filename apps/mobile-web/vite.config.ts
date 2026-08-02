@@ -12,6 +12,8 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  // 두 앱이 같은 Supabase를 쓰므로 .env는 레포 루트에 한 벌만 둔다.
+  envDir: path.resolve(dirname, '../..'),
   plugins: [
     tanstackRouter({
       target: 'react',
