@@ -1,6 +1,11 @@
 -- 수련회 참가자가 올린 사진 + 감사 메시지 한 건 = exhibits 레코드 한 행.
--- mobile-web이 INSERT 하고, projector-web이 SELECT + Realtime으로 구독한다.
--- 백엔드 서버 없이 anon 키로만 접근하므로 모든 권한 통제는 RLS로 한다.
+-- mobile-web이 INSERT 하고, projector-web이 SELECT + Realtime으로 구독하고,
+-- admin-web이 DELETE 한다.
+--
+-- 참가자는 anon 키로만 접근하므로 권한 통제는 전부 RLS로 한다.
+-- 삭제는 하드킬이다. 소프트 삭제 플래그를 두지 않고 행을 지운다.
+-- 행이 사라지면 Storage 파일도 따라 지워진다 (supabase/functions/cleanup-orphan-images).
+-- 즉 이 테이블이 단일 진실 공급원이고, CDN은 그 뒤를 따라온다.
 
 -- ---------------------------------------------------------------------------
 -- 1. 테이블
@@ -10,42 +15,50 @@ create table if not exists public.exhibits (
   -- Storage 버킷 내부 경로 (예: "9f1c....webp"). 공개 URL은 클라이언트에서 조합한다.
   image_path text not null,
   message text not null default '',
-  -- 부적절한 게시물을 삭제하지 않고 화면에서만 내리기 위한 플래그 (운영자가 대시보드에서 조작)
-  is_hidden boolean not null default false,
   created_at timestamptz not null default now(),
   constraint exhibits_image_path_length check (char_length(image_path) between 1 and 255),
   constraint exhibits_message_length check (char_length(message) <= 500)
 );
 
--- 프로젝터는 "숨김이 아닌 것을 최신순으로"만 조회한다.
-create index if not exists exhibits_visible_created_at_idx
-  on public.exhibits (created_at desc)
-  where is_hidden = false;
+-- 프로젝터는 최신순 조회, 만료 작업은 오래된 것부터 삭제. 둘 다 이 인덱스를 쓴다.
+create index if not exists exhibits_created_at_idx
+  on public.exhibits (created_at desc);
 
 -- ---------------------------------------------------------------------------
 -- 2. 테이블 RLS
 -- ---------------------------------------------------------------------------
 alter table public.exhibits enable row level security;
 
-drop policy if exists "exhibits: anyone can read visible" on public.exhibits;
-create policy "exhibits: anyone can read visible"
+drop policy if exists "exhibits: anyone can read" on public.exhibits;
+create policy "exhibits: anyone can read"
   on public.exhibits
   for select
   to anon, authenticated
-  using (is_hidden = false);
+  using (true);
 
--- 참가자는 생성만 가능하다. 숨김 상태로 만들어 올리는 것은 막는다.
 drop policy if exists "exhibits: anyone can insert" on public.exhibits;
 create policy "exhibits: anyone can insert"
   on public.exhibits
   for insert
   to anon, authenticated
-  with check (is_hidden = false);
+  with check (true);
 
--- update / delete 정책은 만들지 않는다 => anon은 수정·삭제 불가.
+-- 삭제는 로그인한 관리자만. anon에게 열어주면 URL을 아는 참가자 누구나
+-- 전체 전시물을 지울 수 있다.
+drop policy if exists "exhibits: admin can delete" on public.exhibits;
+create policy "exhibits: admin can delete"
+  on public.exhibits
+  for delete
+  to authenticated
+  using (true);
+
+-- update 정책은 만들지 않는다. 한 번 올린 전시물은 수정 대상이 아니다.
 
 -- ---------------------------------------------------------------------------
 -- 3. Realtime 퍼블리케이션
+--    프로젝터가 INSERT(새 사진)와 DELETE(관리자 삭제 / 5분 만료)를 모두 구독한다.
+--    DELETE 페이로드에는 기본키만 오는데, 큐에서 id로 빼는 데는 그거면 충분하므로
+--    replica identity는 기본값(default)을 그대로 둔다.
 -- ---------------------------------------------------------------------------
 do $$
 begin
@@ -94,6 +107,5 @@ create policy "exhibit images: anyone can upload"
   with check (bucket_id = 'exhibit-images');
 
 -- delete 정책은 만들지 않는다.
--- anon에게 delete를 열어주면 참가자 누구나 전체 이미지를 지울 수 있다.
--- 그 대신 레코드 생성이 실패한 이미지는 고아 파일로 남는데,
--- 실패는 드물고 파일당 300KB 수준이라 운영 후 대시보드에서 일괄 정리하는 편이 안전하다.
+-- 파일 삭제는 Edge Function이 service_role 키로 수행하는데, service_role은
+-- RLS를 우회하므로 정책이 필요 없다. anon/authenticated에게는 닫아둔다.
