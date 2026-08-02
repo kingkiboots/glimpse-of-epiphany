@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "comment": "라우팅을 브라우저에서 처리하는 SPA라 /compose 같은 경로에 해당하는 파일이 서버에 없다. 새로고침·직접 접속·공유 링크로 들어오면 404가 나므로 모든 요청을 index.html로 보내고 라우팅은 앱이 맡는다. Vercel은 실제 파일을 먼저 찾고 없을 때만 rewrite를 적용하므로 /assets 의 js·css·폰트는 그대로 서빙된다.",
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
