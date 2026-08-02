@@ -2,16 +2,16 @@ import Button from "@/shared/ui/Button";
 import ImageBox from "@/shared/ui/ImageBox";
 import Input from "@/shared/ui/Input";
 import Panel from "@/shared/ui/Panel";
-import { useId, useState } from "react";
+import { useId } from "react";
 
 import styles from "./ComposePage.module.css";
 import { useNavigate } from "@tanstack/react-router";
 import { ROUTE_PATHS } from "@/shared/consts";
+import { useExhibitDraft } from "@/entities/exhibit";
 
 const ComposePage = () => {
   const id = useId();
-  const [file, setFile] = useState<File | null>(null);
-  const [value, setValue] = useState("");
+  const { file, message, setFile, setMessage } = useExhibitDraft();
 
   const navigate = useNavigate();
 
@@ -38,8 +38,8 @@ const ComposePage = () => {
         <Panel radius="panel" padding="10px 12px" width={272} height={134}>
           <Input
             id={id}
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
           />
         </Panel>
       </div>
