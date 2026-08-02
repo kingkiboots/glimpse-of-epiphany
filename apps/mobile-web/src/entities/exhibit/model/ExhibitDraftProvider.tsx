@@ -4,12 +4,13 @@ import { ExhibitDraftContext } from "./exhibit-draft-context";
 import type { ExhibitDraftContextValue } from "./types";
 
 /**
- * 작성(compose) 화면과 미리보기(confirm) 화면이 같은 사진·메시지를 바라보게 하는 저장소.
+ * 작성 흐름 전체(홈 → 준비 → 작성 → 미리보기)가 같은 사진·메시지를 바라보게 하는 저장소.
  * File 객체는 URL로 직렬화할 수 없어 라우터 search param으로 넘길 수 없기 때문에
  * 라우트 바깥(RootLayout)에 두어 페이지 이동에도 값이 유지되도록 한다.
  */
 const ExhibitDraftProvider = ({ children }: PropsWithChildren) => {
   const [file, setFileState] = useState<File | null>(null);
+  const [compressedFile, setCompressedFileState] = useState<File | null>(null);
   const [message, setMessage] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -27,6 +28,12 @@ const ExhibitDraftProvider = ({ children }: PropsWithChildren) => {
     previewUrlRef.current = url;
     setPreviewUrl(url);
     setFileState(next);
+    // 사진이 바뀌면 앞서 변환해둔 webp는 다른 사진의 결과물이므로 버린다.
+    setCompressedFileState(null);
+  }, []);
+
+  const setCompressedFile = useCallback((next: File) => {
+    setCompressedFileState(next);
   }, []);
 
   const reset = useCallback(() => {
@@ -44,8 +51,25 @@ const ExhibitDraftProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const value = useMemo<ExhibitDraftContextValue>(
-    () => ({ file, message, previewUrl, setFile, setMessage, reset }),
-    [file, message, previewUrl, setFile, reset],
+    () => ({
+      file,
+      compressedFile,
+      message,
+      previewUrl,
+      setFile,
+      setCompressedFile,
+      setMessage,
+      reset,
+    }),
+    [
+      file,
+      compressedFile,
+      message,
+      previewUrl,
+      setFile,
+      setCompressedFile,
+      reset,
+    ],
   );
 
   return (

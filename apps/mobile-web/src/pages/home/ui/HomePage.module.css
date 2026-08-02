@@ -41,6 +41,10 @@
   padding-bottom: 18px;
 }
 
+.fileInput {
+  display: none;
+}
+
 .ctaCaption {
   composes: caption from "@/shared/styles/typography.module.css";
   z-index: 1;

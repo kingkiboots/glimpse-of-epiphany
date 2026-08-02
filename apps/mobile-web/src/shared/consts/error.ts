@@ -10,4 +10,8 @@ export const ERROR_TYPES: Record<string, ErrorType> = {
     name: "upload-failed",
     message: `사진을 업로드 할 수 없습니다.`,
   },
+  "prepare-failed": {
+    name: "prepare-failed",
+    message: `사진을 준비할 수 없습니다.`,
+  },
 };
