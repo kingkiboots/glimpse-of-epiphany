@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import ImageBox from "@/shared/ui/ImageBox";
 import Typography from "@/shared/ui/Typography";
@@ -50,10 +50,9 @@ export const Default: Story = {
 
 export const WithImageBox: Story = {
   render: function Render() {
-    const [file, setFile] = useState<File | null>(null);
     return (
       <Panel radius="panel" padding="8px" width={272} height={247}>
-        <ImageBox file={file} onChange={setFile} />
+        <ImageBox src="/img/친구.webp" />
       </Panel>
     );
   },
@@ -61,7 +60,6 @@ export const WithImageBox: Story = {
 
 export const WithImageBoxAndText: Story = {
   render: function Render() {
-    const [file, setFile] = useState<File | null>(null);
     return (
       <Panel
         width={272}
@@ -77,7 +75,7 @@ export const WithImageBoxAndText: Story = {
           style={{ display: "flex", flexDirection: "column", gap: 4 }}
         >
           <div className="img-area" style={{ width: "100%", height: 228 }}>
-            <ImageBox file={file} onChange={setFile} />
+            <ImageBox src="/img/친구.webp" />
           </div>
           <div
             className="text-area"

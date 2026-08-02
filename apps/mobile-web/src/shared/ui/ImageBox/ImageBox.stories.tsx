@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import ImageBox from "./ImageBox";
 import Panel from "../Panel";
@@ -8,8 +7,7 @@ const meta = {
   component: ImageBox,
   tags: ["autodocs"],
   args: {
-    file: null,
-    onChange: () => {},
+    src: null,
   },
   decorators: [
     (Story) => (
@@ -36,10 +34,22 @@ type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {
   render: function Render(args) {
-    const [file, setFile] = useState<File | null>(null);
     return (
       <Panel radius="panel" padding="8px" width={272} height={247}>
-        <ImageBox {...args} file={file} onChange={setFile} />
+        <ImageBox {...args} />
+      </Panel>
+    );
+  },
+};
+
+export const Filled: Story = {
+  args: {
+    src: "/img/친구.webp",
+  },
+  render: function Render(args) {
+    return (
+      <Panel radius="panel" padding="8px" width={272} height={247}>
+        <ImageBox {...args} />
       </Panel>
     );
   },

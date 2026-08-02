@@ -26,7 +26,3 @@
   composes: caption from "@/shared/styles/typography.module.css";
   color: var(--color-text);
 }
-
-.input {
-  display: none;
-}

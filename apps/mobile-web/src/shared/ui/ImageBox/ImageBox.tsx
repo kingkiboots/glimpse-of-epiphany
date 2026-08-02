@@ -1,70 +1,31 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEventHandler,
-} from "react";
 import styles from "./ImageBox.module.css";
 
 type ImageBoxProps = {
-  file: File | null;
-  onChange: (file: File | null) => void;
+  /** 표시할 이미지 URL. 없으면 placeholder를 보여준다. */
+  src: string | null;
+  alt?: string;
   placeholder?: string;
 };
 
+/**
+ * 고른 사진을 보여주기만 한다. 사진 선택은 홈 화면에서 한 번만 일어나고,
+ * 그 직후 준비 화면에서 webp로 변환하기 때문에 이후 화면에서 사진을 바꿀 수 없다.
+ */
 const ImageBox = ({
-  file,
-  onChange,
-  placeholder = "사진 선택하기",
+  src,
+  alt = "선택한 사진",
+  placeholder = "선택한 사진이 없어요",
 }: ImageBoxProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!file) {
-      setPreviewUrl(null);
-      return;
-    }
-
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      onChange(event.target.files?.[0] ?? null);
-    },
-    [onChange],
-  );
-
   return (
-    <button
-      type="button"
-      className={styles.root}
-      onClick={() => inputRef.current?.click()}
-    >
-      {previewUrl ? (
-        <img
-          src={previewUrl}
-          alt="선택한 사진 미리보기"
-          className={styles.preview}
-        />
+    <div className={styles.root}>
+      {src ? (
+        <img src={src} alt={alt} className={styles.preview} />
       ) : (
         <span className={styles.placeholder}>
           <span className={styles.placeholderLabel}>{placeholder}</span>
         </span>
       )}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        className={styles.input}
-        onChange={handleChange}
-      />
-    </button>
+    </div>
   );
 };
 

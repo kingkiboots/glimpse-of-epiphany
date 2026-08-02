@@ -18,10 +18,11 @@ const ConfirmPage = () => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
 
-  // 새로고침 등으로 작성 내용이 사라진 채 이 화면에 들어온 경우 작성 화면으로 되돌린다.
+  // 새로고침 등으로 사진이 사라진 채 들어온 경우. 작성 화면에도 사진을 고를 방법이
+  // 없으므로 처음으로 되돌린다.
   useEffect(() => {
     if (!file) {
-      navigate({ to: ROUTE_PATHS.compose, replace: true });
+      navigate({ to: ROUTE_PATHS.home, replace: true });
     }
   }, [file, navigate]);
 
