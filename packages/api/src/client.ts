@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { assertPublishableKey } from "./assert-publishable-key";
+import { sanitizeEnvValue } from "./sanitize-env-value";
 import type { Database } from "./database.types";
 
 let client: SupabaseClient<Database> | null = null;
@@ -13,14 +14,19 @@ export const getSupabaseClient = (): SupabaseClient<Database> => {
     return client;
   }
 
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const rawUrl = import.meta.env.VITE_SUPABASE_URL;
+  const rawAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-  if (!url || !anonKey) {
+  if (!rawUrl || !rawAnonKey) {
     throw new Error(
-      "VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY 가 설정되지 않았습니다. 앱의 .env 파일을 확인하세요.",
+      "VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY 가 설정되지 않았습니다. 레포 루트의 .env 파일을 확인하세요.",
     );
   }
+
+  // 이 두 값은 매 요청의 HTTP 헤더로 들어간다. 붙여넣기 사고로 줄바꿈이 섞이면
+  // 첫 요청에서야 정체불명의 Headers 에러로 터지므로 여기서 미리 정리한다.
+  const url = sanitizeEnvValue("VITE_SUPABASE_URL", rawUrl);
+  const anonKey = sanitizeEnvValue("VITE_SUPABASE_ANON_KEY", rawAnonKey);
 
   // 비밀 키가 클라이언트 번들에 실려 나가는 사고를 여기서 막는다.
   assertPublishableKey(anonKey);
