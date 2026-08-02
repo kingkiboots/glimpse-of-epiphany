@@ -2,13 +2,18 @@ import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
 import { useExhibitDraft } from "@/entities/exhibit";
 import { useNavigate } from "@tanstack/react-router";
-import { useRef, type ChangeEventHandler } from "react";
+import { useEffect, useRef, type ChangeEventHandler } from "react";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { setFile } = useExhibitDraft();
+  const { setFile, reset } = useExhibitDraft();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // 첫 페이지 진입 시 그 전에 뭘 했던 간에 Exihibit Draft 초기화
+  useEffect(() => {
+    reset();
+  }, []);
 
   // 갤러리는 반드시 이 클릭에서 바로 열어야 한다. 먼저 화면을 옮긴 뒤 코드로 열면
   // 모바일 브라우저가 사용자 제스처 없는 파일 선택으로 보고 막는다.
