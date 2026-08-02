@@ -188,6 +188,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@packages/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@supabase/supabase-js':
         specifier: ^2.95.0
         version: 2.111.0

@@ -7,6 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@packages/utils": "workspace:*",
     "@supabase/supabase-js": "^2.95.0"
   },
   "devDependencies": {

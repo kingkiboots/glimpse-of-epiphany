@@ -27,7 +27,12 @@ comment on function public.delete_expired_exhibits is
   '남은 Storage 파일은 cleanup-orphan-images Edge Function이 정리한다.';
 
 -- 참가자(anon)가 직접 호출할 이유가 없다. 크론(postgres)만 실행한다.
-revoke execute on function public.delete_expired_exhibits() from anon, authenticated;
+--
+-- anon/authenticated에서 회수하는 것으로는 막히지 않는다. PostgreSQL은 함수를 만들 때
+-- EXECUTE를 PUBLIC에 기본 부여하고 모든 롤이 그 경로로 권한을 갖기 때문에,
+-- PUBLIC에서 회수해야 실제로 닫힌다. public 스키마의 함수는 PostgREST가
+-- /rpc/ 로 노출하므로 이 회수가 없으면 anon이 그대로 호출할 수 있다.
+revoke execute on function public.delete_expired_exhibits() from public;
 
 -- ---------------------------------------------------------------------------
 -- 1분마다 실행되도록 등록 (재실행해도 중복 등록되지 않게 먼저 해제)

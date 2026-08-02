@@ -13,11 +13,18 @@
 create table if not exists public.exhibits (
   id uuid primary key default gen_random_uuid(),
   -- Storage 버킷 내부 경로 (예: "9f1c....webp"). 공개 URL은 클라이언트에서 조합한다.
-  image_path text not null,
+  -- unique: 여러 행이 같은 파일을 가리키면 한 행을 지워도 파일이 남아 상태가 꼬인다.
+  image_path text not null unique,
   message text not null default '',
+  -- 업로드한 기기를 구분하는 값 (localStorage에 저장된 임의 UUID).
+  -- 한 사람이 반복해서 올릴 때 운영자가 기기 단위로 정리할 수 있게 한다.
+  -- nullable인 이유: 값이 없다고 업로드가 실패하면 안 된다. 참가자가 사진을
+  -- 올리는 것이 이 앱의 전부이고, 이 값은 운영 편의를 위한 부가 정보다.
+  client_id uuid,
   created_at timestamptz not null default now(),
   constraint exhibits_image_path_length check (char_length(image_path) between 1 and 255),
-  constraint exhibits_message_length check (char_length(message) <= 500)
+  -- 입력 UI는 100자로 제한한다. DB는 그 두 배까지만 받아준다.
+  constraint exhibits_message_length check (char_length(message) <= 200)
 );
 
 -- 프로젝터는 최신순 조회, 만료 작업은 오래된 것부터 삭제. 둘 다 이 인덱스를 쓴다.

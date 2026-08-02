@@ -19,18 +19,21 @@ export type Database = {
     Tables: {
       exhibits: {
         Row: {
+          client_id: string | null;
           created_at: string;
           id: string;
           image_path: string;
           message: string;
         };
         Insert: {
+          client_id?: string | null;
           created_at?: string;
           id?: string;
           image_path: string;
           message?: string;
         };
         Update: {
+          client_id?: string | null;
           created_at?: string;
           id?: string;
           image_path?: string;

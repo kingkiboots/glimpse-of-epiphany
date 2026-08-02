@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { createExhibit } from "@packages/api";
 import { useExhibitDraft } from "@/entities/exhibit";
 import { ROUTE_PATHS } from "@/shared/consts";
+import { getClientId } from "@/shared/lib/client-id";
 
 /**
  * 준비 화면에서 변환해둔 webp와 작성한 메시지를 Supabase(Storage + DB)에 올린다.
@@ -23,7 +24,11 @@ export const useSubmitExhibit = () => {
     setIsSubmitting(true);
 
     try {
-      await createExhibit({ imageFile: compressedFile, message });
+      await createExhibit({
+        imageFile: compressedFile,
+        message,
+        clientId: getClientId(),
+      });
 
       // 화면을 먼저 전환한 뒤 초기화한다.
       // 순서를 바꾸면 confirm 화면이 "사진 없음"으로 판단해 홈으로 되돌린다.

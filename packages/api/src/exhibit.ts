@@ -1,4 +1,5 @@
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import { randomUuid } from "@packages/utils";
 import { getSupabaseClient } from "./client";
 import type { ExhibitRow } from "./types";
 
@@ -18,12 +19,19 @@ export type Exhibit = {
   imageUrl: string;
   message: string;
   createdAt: string;
+  /** 업로드한 기기 식별자. 값이 없을 수 있다. */
+  clientId: string | null;
 };
 
 export type CreateExhibitInput = {
   /** webp로 변환·압축이 끝난 이미지 파일 */
   imageFile: File;
   message: string;
+  /**
+   * 업로드한 기기 식별자(localStorage의 임의 UUID).
+   * 운영자가 기기 단위로 정리할 때 쓰는 부가 정보라 없어도 업로드는 진행한다.
+   */
+  clientId?: string | null;
 };
 
 export type ExhibitSubscriptionHandlers = {
@@ -42,6 +50,7 @@ const toExhibit = (row: ExhibitRow): Exhibit => ({
   imageUrl: getExhibitImageUrl(row.image_path),
   message: row.message,
   createdAt: row.created_at,
+  clientId: row.client_id,
 });
 
 /**
@@ -51,9 +60,10 @@ const toExhibit = (row: ExhibitRow): Exhibit => ({
 export const createExhibit = async ({
   imageFile,
   message,
+  clientId = null,
 }: CreateExhibitInput): Promise<Exhibit> => {
   const supabase = getSupabaseClient();
-  const imagePath = `${crypto.randomUUID()}.webp`;
+  const imagePath = `${randomUuid()}.webp`;
 
   const { error: uploadError } = await supabase.storage
     .from(EXHIBIT_IMAGE_BUCKET)
@@ -71,7 +81,7 @@ export const createExhibit = async ({
 
   const { data, error } = await supabase
     .from("exhibits")
-    .insert({ image_path: imagePath, message })
+    .insert({ image_path: imagePath, message, client_id: clientId })
     .select()
     .single();
 
