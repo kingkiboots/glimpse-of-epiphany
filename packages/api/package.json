@@ -1,0 +1,21 @@
+{
+  "name": "@packages/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "gen:db-types": "supabase gen types typescript --project-id \"${SUPABASE_PROJECT_ID:?set SUPABASE_PROJECT_ID (see .env.example)}\" --schema public > src/database.types.tmp && mv src/database.types.tmp src/database.types.ts || rm -f src/database.types.tmp"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.95.0"
+  },
+  "devDependencies": {
+    "@packages/config": "workspace:*",
+    "supabase": "^2.63.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1"
+  }
+}
