@@ -8,4 +8,3 @@ export const GLASS_EFFECT = {
   elasticity: 0.0,
   overLight: true,
 } as const;
-2
