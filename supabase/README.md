@@ -36,7 +36,7 @@ pnpm exec supabase db push
 cp .env.example .env   # 레포 루트에서
 ```
 
-두 앱의 `vite.config.ts`가 `envDir`을 루트로 잡고 있어 `.env` 한 벌을 공유합니다.
+세 앱의 `vite.config.ts`가 `envDir`을 루트로 잡고 있어 `.env` 한 벌을 공유합니다.
 `service_role` 키를 넣으면 앱이 실행 시점에 예외를 던지니 주의하세요 (아래 "보안" 참고).
 
 ### 4. 관리자 계정

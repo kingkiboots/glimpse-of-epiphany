@@ -22,7 +22,7 @@
 - `packages/api`: Supabase Singleton 클라이언트 및 API 공통 로직
 - `packages/env`: 세 앱이 공유하는 환경변수 읽기·검증 (`import.meta.env` 접근은 여기서만)
 - `packages/utils`: 앱과 패키지가 함께 쓰는 순수 유틸 함수
-- _참고: 두 앱의 UI 성격이 매우 다르므로 `packages/ui`는 사용하지 않으며, 각 앱의 `shared/ui`에서 개별 관리합니다._
+- _참고: 세 앱의 UI 성격이 매우 다르므로 공용 UI 패키지를 두지 않습니다. UI 컴포넌트는 각 앱의 `shared/ui`에서 개별 관리합니다._
 - **Import Alias:** 공유 패키지는 `@packages/*` 로, 앱 내부는 `@/*` 로 import 합니다.
 
 ## Architecture Rules (FSD - Feature-Sliced Design)

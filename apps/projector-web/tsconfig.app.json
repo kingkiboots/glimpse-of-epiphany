@@ -24,8 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@packages/api": ["../../packages/api/index.ts"],
-      "@packages/config": ["../../packages/config/src/index.ts"],
-      "@packages/ui": ["../../packages/ui/src/index.ts"]
+      "@packages/config": ["../../packages/config/src/index.ts"]
     }
   },
   "include": ["src"]
