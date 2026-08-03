@@ -6,12 +6,14 @@ import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useExhibitDraft } from "@/entities/exhibit";
 import { useSubmitExhibit } from "@/features/submit-exhibit";
+import { useSaveExhibitImage } from "@/features/save-exhibit-image";
 import styles from "./ConfirmPage.module.css";
 
 const ConfirmPage = () => {
   const [currentDate] = useState(getCurrentDate);
   const { file, message, previewUrl } = useExhibitDraft();
   const { submit, isSubmitting } = useSubmitExhibit();
+  const { save, isReady: isImageReady, isSaving } = useSaveExhibitImage();
 
   const navigate = useNavigate();
 
@@ -28,6 +30,10 @@ const ConfirmPage = () => {
 
   const handleSubmitClick = () => {
     /*void*/ submit();
+  };
+
+  const handleSaveClick = () => {
+    void save();
   };
 
   const handlePrevStepClick = () => {
@@ -94,8 +100,12 @@ const ConfirmPage = () => {
           >
             {isSubmitting ? "전시하는 중..." : "이미지 전시하기"}
           </Button>
-          {/* STUB - 이 기능은 없어짐 */}
-          {/* <Button onClick={() => {}}>저장하기</Button> */}
+          <Button
+            onClick={handleSaveClick}
+            disabled={!isImageReady || isSaving || isSubmitting}
+          >
+            {isSaving ? "저장하는 중..." : "저장하기"}
+          </Button>
           <Button onClick={handlePrevStepClick} disabled={isSubmitting}>
             이전으로
           </Button>
