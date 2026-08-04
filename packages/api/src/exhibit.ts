@@ -7,11 +7,23 @@ import type { ExhibitRow } from "./types";
 export const EXHIBIT_IMAGE_BUCKET = "exhibit-images";
 
 /**
+ * 전시물이 남아 있는 시간(시간 단위).
+ *
+ * 전시가 2시간 반이라 초반에 올린 사진은 행사가 끝나기 전에 사라진다. 다만 프로젝터
+ * 자리가 18칸뿐이라 그 사진들은 이미 뒤 사진에 밀려나 있을 시점이다.
+ *
+ * 화면 문구가 이 값을 그대로 쓰므로, 바꿀 때는
+ * `20260804000100_schedule_exhibit_expiry_2h.sql`의 interval도 함께 맞춰야 한다.
+ * 실제 삭제는 크론이 10분마다 돌기 때문에 2시간에서 10분쯤 늦게 일어난다.
+ */
+export const EXHIBIT_TTL_HOURS = 2;
+
+/**
  * CDN 캐시 수명(초).
  *
- * 전시물은 관리자가 내리기 전까지 남지만, 캐시는 짧게 잡는다. 길게 잡으면
- * 관리자가 내린 사진이 한동안 CDN 엣지에서 계속 서빙되어 하드킬이 성립하지 않는다.
- * 부적절한 사진을 즉시 내려야 하는 것이 관리자 화면의 존재 이유다.
+ * 수명이 2시간이어도 캐시는 짧게 잡는다. 길게 잡으면 관리자가 내린 사진이 한동안
+ * CDN 엣지에서 계속 서빙되어 하드킬이 성립하지 않는다. 부적절한 사진을 즉시
+ * 내려야 하는 것이 관리자 화면의 존재 이유다.
  */
 const EXHIBIT_CACHE_SECONDS = 300;
 
@@ -38,7 +50,7 @@ export type CreateExhibitInput = {
 
 export type ExhibitSubscriptionHandlers = {
   onInsert?: (exhibit: Exhibit) => void;
-  /** 관리자 삭제. 페이로드에 기본키만 오므로 id만 넘긴다. */
+  /** 관리자 삭제 또는 2시간 만료. 페이로드에 기본키만 오므로 id만 넘긴다. */
   onDelete?: (id: string) => void;
 };
 

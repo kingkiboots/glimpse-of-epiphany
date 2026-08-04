@@ -7,8 +7,8 @@ import {
 } from "@packages/api";
 
 /**
- * 관리자 목록. 참가자가 올리는 사진이 계속 들어오고 다른 운영자가 지우기도 하므로,
- * Realtime으로 붙들어 이미 없어진 사진에 삭제 버튼을 누르는 상황을 막는다.
+ * 관리자 목록. 참가자가 올리는 사진이 계속 들어오고, 2시간이 지난 것은 스스로
+ * 사라지므로, Realtime으로 붙들어 이미 없어진 사진에 삭제 버튼을 누르는 상황을 막는다.
  */
 export const useExhibits = () => {
   const [exhibits, setExhibits] = useState<Exhibit[]>([]);

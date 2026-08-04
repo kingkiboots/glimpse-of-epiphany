@@ -36,6 +36,7 @@
 | `subscribeToExhibits({ onInsert, onDelete })` | Realtime 구독. 반환된 함수로 해제 |
 | `getExhibitImageUrl(path)` | Storage 경로 → CDN 공개 URL |
 | `EXHIBIT_IMAGE_BUCKET` | 버킷 이름 |
+| `EXHIBIT_TTL_HOURS` | 전시 유지 시간(시간). 화면 문구와 마이그레이션의 interval이 공유 |
 
 ### 인증 (운영자)
 

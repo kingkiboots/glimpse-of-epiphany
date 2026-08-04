@@ -8,6 +8,7 @@ export {
 export type { Session } from "./src/auth";
 export {
   EXHIBIT_IMAGE_BUCKET,
+  EXHIBIT_TTL_HOURS,
   createExhibit,
   deleteExhibit,
   fetchExhibits,

@@ -1,8 +1,8 @@
 // exhibits 테이블에 대응하는 행이 없는 Storage 파일을 지운다.
 //
-// 관리자가 사진을 내렸든(admin-web), 업로드 도중 INSERT가 실패해 파일만 남았든,
-// 결과는 "행이 없는 파일이 있다"로 같고 정리는 전부 여기서 처리한다.
-// DB가 단일 진실 공급원이고 CDN이 뒤를 따른다.
+// 관리자가 내렸든(admin-web), 2시간이 지나 만료됐든(delete_expired_exhibits 크론),
+// 업로드 도중 INSERT가 실패해 파일만 남았든, 결과는 "행이 없는 파일이 있다"로 같고
+// 정리는 전부 여기서 처리한다. DB가 단일 진실 공급원이고 CDN이 뒤를 따른다.
 //
 // Storage 파일은 SQL로 지울 수 없다. storage.objects에서 행을 지워도 실제 파일은
 // 남기 때문에, service_role 키로 Storage API를 호출하는 이 함수가 필요하다.
