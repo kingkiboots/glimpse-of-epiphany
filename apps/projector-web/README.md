@@ -1,75 +1,159 @@
-# React + TypeScript + Vite
+# projector-web — 빔프로젝터 화면
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+행사장 스크린에 띄우는 화면입니다. **참가자가 올린 사진이 실시간으로 벽에 채워지고,
+채워진 만큼 천천히 흘러갑니다.**
 
-Currently, two official plugins are available:
+> ⚠️ **아직 구현 전입니다.** 이 문서는 확정된 기획을 코드보다 먼저 적어둔 것입니다.
+> 구현하면서 어긋나는 부분이 생기면 이 문서를 먼저 고치고 코드를 맞춥니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 한눈에 보기
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**사진만 뜹니다.** 참가자가 쓴 감사 메시지는 스크린에 나가지 않습니다.
+그 글은 참가자가 자기 폰에 간직하는 이미지에만 들어갑니다.
 
-## Expanding the ESLint configuration
+| 항목 | 값 |
+| --- | --- |
+| 자리(칸) 수 | **18개** (설정에서 변경 가능) |
+| 채우는 순서 | 위에서부터 |
+| 슬라이딩 시작 | **9칸이 찼을 때부터** |
+| 19번째 사진 | 1번 자리부터 다시 덮어씀 |
+| 사진이 사라지는 때 | 올린 지 2시간 뒤, 또는 운영자가 내렸을 때 |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 자리 배정 규칙
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+칸 18개를 배열 하나로 두고, 새 사진이 들어올 때마다 아래 순서로 자리를 정합니다.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. **비어 있는 칸이 있으면 그중 가장 위쪽 칸**에 넣는다
+2. 빈 칸이 없으면 **가장 오래된 사진이 있는 칸**을 덮어쓴다
 
+이 한 줄짜리 규칙이 기획의 세 가지 요구를 전부 만족합니다.
+
+| 요구 | 이 규칙에서 어떻게 되는가 |
+| --- | --- |
+| 위에서부터 채워진다 | 처음 18장은 빈 칸을 위에서부터 찾으므로 1→18 순서로 찬다 |
+| 19번째부터 처음 자리를 다시 꿰찬다 | 빈 칸이 없으니 가장 오래된 1번 자리를 덮는다. 20번째는 2번 자리 |
+| 운영자가 지우면 빈칸이 된다 | 그 자리가 비고, **다음 업로드가 그 자리를 채운다** |
+
+**운영자 삭제로 생긴 구멍은 메우지 않고 그대로 둡니다.** 뒤 사진들을 한 칸씩 당기면
+자리가 전부 밀려서 다음 사진의 순번 계산도 흔들립니다. 부적절한 사진을 내리는 것이
+목적이므로 빈칸이 잠깐 보이는 것은 문제가 되지 않습니다.
+
+**새로고침하면 자리 배치가 달라집니다.** 순번은 DB에 없고 도착 순서로만 계산하는
+값이라, 다시 접속하면 최신 18장을 위에서부터 새로 깝니다. 사진 구성은 같고 위치만
+섞이는 정도이고 행사 중 새로고침이 잦지 않을 것이라, 별도 처리는 하지 않습니다.
+
+---
+
+## 슬라이딩 규칙
+
+벽 전체는 화면보다 긴 세로 스트립입니다. 채워진 칸 수에 따라 **어디까지 내려갔다가
+맨 위로 돌아오는지**가 달라집니다.
+
+| 채워진 칸 | 동작 |
+| --- | --- |
+| 1 ~ 8칸 | **움직이지 않습니다.** 화면에 다 들어오기 때문입니다 |
+| 9 ~ 12칸 | 12번 칸의 아랫변이 화면 바닥에 닿는 곳(**A**)까지 내려갔다가 맨 위로 |
+| 13 ~ 16칸 | 16번 칸의 아랫변이 화면 바닥에 닿는 곳(**B**)까지 내려갔다가 맨 위로 |
+| 17 ~ 18칸 | 끝까지 내려갔다가 맨 위로 |
+
+정지 지점이 칸 하나 단위가 아니라 **묶음 단위로 끊긴다**는 점이 중요합니다.
+9칸이든 12칸이든 똑같이 A에서 멈춥니다. 칸이 세로로 어긋나게 배치되어 있어
+묶음 중간에서 멈추면 잘린 것처럼 보이기 때문입니다.
+
+빈 칸은 **아무것도 그리지 않고 검은 배경 그대로** 둡니다.
+
+---
+
+## 화면 배치
+
+디자인 캔버스는 **1440 × 3320** 크기의 세로 스트립입니다. 빔프로젝터는 16:9 가로
+화면이므로, 스트립을 **화면 높이에 맞춰 축소해 가운데 세로 띠로 놓고 좌우는 검은
+배경**으로 둡니다. 8칸이 화면에 딱 차도록 맞추면 9번째부터 슬라이딩이 시작됩니다.
+
+### 칸 좌표 (디자인 기준 px)
+
+4개 열에 296 × 279 크기의 칸이 세로로 어긋나게 놓입니다.
+
+| 항목 | 값 |
+| --- | --- |
+| 열 x좌표 | 91, 410, 730, 1051 (간격 320, 칸 사이 여백 24) |
+| 칸 크기 | 296 × 279 |
+| 좌우 여백 | 91 / 92 |
+
+칸 순서는 **윗변이 높은 것부터**입니다. 열 배치가 묶음마다 달라 규칙으로 뽑아낼 수
+없으므로, 18개 좌표를 표로 두고 그대로 씁니다.
+
+| 순번 | 열 | y | 순번 | 열 | y |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 2 | 166 | 10 | 2 | 1502 |
+| 2 | 1 | 309 | 11 | 4 | 1635 |
+| 3 | 4 | 332 | 12 | 3 | 1768 |
+| 4 | 3 | 520 | 13 | 1 | 1873 |
+| 5 | 2 | 827 | 14 | 2 | 2058 |
+| 6 | 1 | 926 | 15 | 3 | 2366 |
+| 7 | 3 | 996 | 16 | 4 | 2487 |
+| 8 | 4 | 1137 | 17 | 1 | 2639 |
+| 9 | 1 | 1448 | 18 | 2 | 2739 |
+
+칸이 4·4·4·2·2·2로 여섯 묶음이고, 정지 지점 A는 세 번째 묶음(12번 칸) 아래,
+B는 다섯 번째 묶음(16번 칸) 아래입니다.
+
+> 좌표는 디자인 시안에서 읽어낸 값이라 오차가 있을 수 있습니다. 실제로 띄워 보고
+> 어긋나면 이 표를 고칩니다.
+
+**칸 수를 18개보다 늘리면** 이 패턴을 세로로 반복해 이어 붙입니다. 19번 칸은 1번 칸을
+스트립 높이만큼 아래로 내린 자리입니다.
+
+---
+
+## 설정 모달
+
+행사 중 운영자가 화면 앞에서 바로 조절할 수 있어야 합니다.
+
+| 항목 | 이유 |
+| --- | --- |
+| 슬라이드 속도 | 사진 수와 분위기에 따라 체감 속도가 달라집니다 |
+| 칸 수 | 참가자는 150명인데 자리는 18개입니다. 자리를 늘리면 한 사람의 사진이 화면에 더 오래 남습니다 |
+
+**칸 수가 설정에 있는 이유**를 짚어둘 필요가 있습니다. 18칸이면 내 뒤로 18명만 더
+올려도 내 사진이 밀려납니다. 150명이 비슷한 시점에 몰려 올리면 사진 한 장이 화면에
+머무는 시간이 1~2분도 안 될 수 있어, 참가자가 "내 사진 떴다"를 확인할 틈이 없습니다.
+현장에서 업로드 속도를 보고 조절하기 위한 손잡이입니다.
+
+---
+
+## 개발자용 메모
+
+### 실행
+
+```bash
+pnpm --filter projector-web dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 쓸 수 있는 API
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+전부 [`@packages/api`](../../packages/api)에 준비되어 있습니다.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| 이름 | 용도 |
+| --- | --- |
+| `fetchExhibits(limit)` | 첫 렌더. 최신순이므로 뒤집어서 위에서부터 깐다 |
+| `subscribeToExhibits({ onInsert, onDelete })` | 실시간 추가·삭제. 반환된 함수로 구독 해제 |
 
-```
+`onDelete`는 **운영자 삭제와 2시간 만료 양쪽 모두** 발생합니다. 페이로드에 기본키만
+실려 오므로 `id`로 자리를 찾아 비웁니다.
+
+### 구현할 때 유의할 것
+
+**화면 밖으로 나간 DOM은 상태에서 즉시 제거합니다.** 행사 내내 켜두는 화면이라
+누수가 쌓이면 그대로 멈춥니다. 자리 배열의 길이는 항상 칸 수로 고정하고, 밀려난
+사진의 참조는 남기지 않습니다.
+
+**애니메이션은 GSAP `useGSAP`으로 감쌉니다.** 언마운트 시 트윈이 정리되지 않으면
+같은 이유로 누수가 됩니다.
+
+**이미지 로드 실패는 조용히 넘깁니다.** 만료로 파일이 사라진 직후에 그 URL을 그리려
+할 수 있습니다. 스크린에 깨진 이미지 아이콘이 뜨는 것보다 빈칸이 낫습니다.
