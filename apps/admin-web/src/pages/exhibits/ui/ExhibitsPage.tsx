@@ -1,4 +1,3 @@
-import { EXHIBIT_TTL_MINUTES } from "@packages/api";
 import { useExhibits } from "@/features/manage-exhibits";
 import styles from "./ExhibitsPage.module.css";
 
@@ -31,8 +30,7 @@ const ExhibitsPage = ({ onSignOut }: ExhibitsPageProps) => {
         <div>
           <h1 className={styles.title}>전시물 관리</h1>
           <p className={styles.caption}>
-            {EXHIBIT_TTL_MINUTES}분이 지나면 자동으로 사라집니다. 목록은 실시간으로
-            갱신됩니다.
+            삭제하기 전까지 화면에 남습니다. 목록은 실시간으로 갱신됩니다.
           </p>
         </div>
         <button className={styles.signOut} type="button" onClick={onSignOut}>

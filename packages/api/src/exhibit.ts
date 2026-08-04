@@ -7,11 +7,13 @@ import type { ExhibitRow } from "./types";
 export const EXHIBIT_IMAGE_BUCKET = "exhibit-images";
 
 /**
- * 전시물이 화면에 살아있는 시간(분).
- * 실제 삭제는 pg_cron이 1분마다 돌기 때문에 5~6분 사이에 일어난다.
- * 마이그레이션의 interval 값과 함께 맞춰야 한다.
+ * CDN 캐시 수명(초).
+ *
+ * 전시물은 관리자가 내리기 전까지 남지만, 캐시는 짧게 잡는다. 길게 잡으면
+ * 관리자가 내린 사진이 한동안 CDN 엣지에서 계속 서빙되어 하드킬이 성립하지 않는다.
+ * 부적절한 사진을 즉시 내려야 하는 것이 관리자 화면의 존재 이유다.
  */
-export const EXHIBIT_TTL_MINUTES = 5;
+const EXHIBIT_CACHE_SECONDS = 300;
 
 /** 두 앱이 공유하는 도메인 모델. DB row(snake_case)를 화면에서 쓰기 좋은 형태로 변환한 값. */
 export type Exhibit = {
@@ -36,7 +38,7 @@ export type CreateExhibitInput = {
 
 export type ExhibitSubscriptionHandlers = {
   onInsert?: (exhibit: Exhibit) => void;
-  /** 관리자 삭제 또는 5분 만료. 페이로드에 기본키만 오므로 id만 넘긴다. */
+  /** 관리자 삭제. 페이로드에 기본키만 오므로 id만 넘긴다. */
   onDelete?: (id: string) => void;
 };
 
@@ -69,9 +71,7 @@ export const createExhibit = async ({
     .from(EXHIBIT_IMAGE_BUCKET)
     .upload(imagePath, imageFile, {
       contentType: "image/webp",
-      // 5분이면 사라지는 이미지다. 캐시를 길게 잡으면 삭제 후에도
-      // CDN 엣지에서 한동안 계속 서빙되어 하드킬이 성립하지 않는다.
-      cacheControl: `${EXHIBIT_TTL_MINUTES * 60}`,
+      cacheControl: `${EXHIBIT_CACHE_SECONDS}`,
       upsert: false,
     });
 

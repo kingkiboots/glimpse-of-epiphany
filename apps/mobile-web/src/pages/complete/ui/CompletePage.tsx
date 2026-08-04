@@ -2,7 +2,6 @@ import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
 import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
 import { useNavigate } from "@tanstack/react-router";
-import { EXHIBIT_TTL_MINUTES } from "@packages/api";
 import styles from "./CompletePage.module.css";
 
 const CompletePage = () => {
@@ -21,7 +20,7 @@ const CompletePage = () => {
         <p className={styles.body}>
           이미지 업로드에 성공했어요.
           <br />
-          지금부터 {EXHIBIT_TTL_MINUTES}분 동안 화면에 전시된 뒤 사라집니다.
+          지금부터 화면에 전시됩니다.
         </p>
       </header>
       <div className={styles.ctaArea}>
