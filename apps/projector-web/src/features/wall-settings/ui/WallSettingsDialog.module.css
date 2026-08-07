@@ -1,0 +1,92 @@
+.trigger {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--color-text);
+  font-size: 20px;
+  line-height: 1;
+  /* 관객에게 보이면 안 되는 버튼. 검은 배경 위에서 거의 투명하게 숨어 있다가
+     운영자가 마우스를 올렸을 때만 드러난다. */
+  opacity: 0.08;
+  transition: opacity 0.2s ease;
+}
+
+.trigger:hover,
+.trigger:focus-visible {
+  opacity: 1;
+}
+
+.dialog {
+  width: min(360px, calc(100% - 32px));
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 16px;
+  background: #111;
+  color: var(--color-text);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.fieldLabel {
+  grid-column: 1 / -1;
+  color: rgb(255 255 255 / 70%);
+}
+
+.field input[type="range"] {
+  width: 100%;
+  accent-color: #fff;
+}
+
+.fieldValue {
+  min-width: 3ch;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.hint {
+  color: rgb(255 255 255 / 50%);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.close {
+  align-self: flex-end;
+  padding: 8px 16px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+.close:hover {
+  border-color: rgb(255 255 255 / 60%);
+}

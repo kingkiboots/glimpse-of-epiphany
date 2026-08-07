@@ -21,6 +21,12 @@ body,
 
 body {
   line-height: 1.5;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  /* 벽은 GSAP이 스트립을 직접 움직이므로 문서 스크롤은 존재하지 않아야 한다.
+     행사 내내 켜두는 화면이라 실수로 스크롤바가 생기면 그대로 노출된다. */
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

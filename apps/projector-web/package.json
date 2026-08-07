@@ -5,13 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev:host": "vite --host",
+    "build": "vite build && tsc -b",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource/diphylleia": "^5.3.0",
     "@fontsource/noto-serif-kr": "^5.3.0",
+    "@gsap/react": "^2.1.2",
+    "@packages/api": "workspace:*",
+    "gsap": "^3.15.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

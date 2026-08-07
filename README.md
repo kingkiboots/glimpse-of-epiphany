@@ -53,12 +53,6 @@
 | [`apps/projector-web`](apps/projector-web) | 빔프로젝터 (1대) | 올라온 **사진**을 실시간으로 렌더링 |
 | [`apps/admin-web`](apps/admin-web) | 운영자 | 전시 중인 사진 확인 및 삭제 |
 
-### 아직 구현하지 않은 것
-
-| 항목 | 상태 |
-| --- | --- |
-| `projector-web` | 미구현. 기획은 [`apps/projector-web/README.md`](apps/projector-web/README.md)에 확정되어 있고, 필요한 API(`fetchExhibits`, `subscribeToExhibits`)도 준비되어 있습니다 |
-
 **감사 메시지는 프로젝터에 표시되지 않습니다.** 화면에는 사진만 띄웁니다.
 메시지는 미리보기 화면과 운영자 화면에서만 보이고, 참가자가 **[저장하기]** 로
 자기 폰에 간직하는 이미지에 들어갑니다.
@@ -472,7 +466,7 @@ flowchart LR
 | --- | --- |
 | [apps/mobile-web/README.md](apps/mobile-web/README.md) | 참가자 화면 흐름 (비개발자용) |
 | [apps/admin-web/README.md](apps/admin-web/README.md) | 운영자 화면 흐름 (비개발자용) |
-| [apps/projector-web/README.md](apps/projector-web/README.md) | 프로젝터 전시 규칙 (구현 전 기획) |
+| [apps/projector-web/README.md](apps/projector-web/README.md) | 프로젝터 전시 규칙 (기획 원본) |
 | [supabase/README.md](supabase/README.md) | DB 세팅 절차, 스키마, 보안, 문제 해결 |
 | [packages/api/README.md](packages/api/README.md) | Supabase 클라이언트와 도메인 API |
 | [packages/env/README.md](packages/env/README.md) | 환경변수 읽기·검증 |
