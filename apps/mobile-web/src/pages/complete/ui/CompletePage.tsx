@@ -21,8 +21,9 @@ const CompletePage = () => {
         <p className={styles.body}>
           이미지 업로드에 성공했어요.
           <br />
-          {EXHIBIT_TTL_HOURS}시간 뒤에는 사라지니, 간직하고 싶다면 미리보기
-          화면에서 저장해 두세요.
+          {EXHIBIT_TTL_HOURS}시간 뒤에는 사라지니,
+          <br />
+          간직하고 싶다면 미리보기 화면에서 저장해 두세요.
         </p>
       </header>
       <div className={styles.ctaArea}>
