@@ -1,6 +1,7 @@
 import { useRef, type MouseEventHandler } from "react";
 import { SETTING_BOUNDS, type WallSettings } from "../model/wall-settings";
 import styles from "./WallSettingsDialog.module.css";
+import { useCheatSettingsButtonActive } from "../lib/use-cheat-settings-button-active";
 
 type WallSettingsDialogProps = {
   settings: WallSettings;
@@ -16,8 +17,12 @@ type WallSettingsDialogProps = {
  * 브라우저 기본 <dialog>를 쓴다. showModal()이 포커스 가두기, ESC로 닫기,
  * 바깥 영역 비활성화를 전부 처리해주므로 직접 구현할 것이 없다.
  */
-const WallSettingsDialog = ({ settings, onUpdate }: WallSettingsDialogProps) => {
+const WallSettingsDialog = ({
+  settings,
+  onUpdate,
+}: WallSettingsDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { isCheatActive } = useCheatSettingsButtonActive();
 
   // <dialog> 자신을 클릭했다는 것은 내용 바깥, 즉 backdrop을 눌렀다는 뜻이다.
   const handleDialogClick: MouseEventHandler<HTMLDialogElement> = (event) => {
@@ -28,14 +33,16 @@ const WallSettingsDialog = ({ settings, onUpdate }: WallSettingsDialogProps) => 
 
   return (
     <>
-      <button
-        type="button"
-        className={styles.trigger}
-        aria-label="전시 설정"
-        onClick={() => dialogRef.current?.showModal()}
-      >
-        ⚙
-      </button>
+      {isCheatActive ? (
+        <button
+          type="button"
+          className={styles.trigger}
+          aria-label="전시 설정"
+          onClick={() => dialogRef.current?.showModal()}
+        >
+          ⚙
+        </button>
+      ) : null}
       <dialog
         ref={dialogRef}
         className={styles.dialog}
