@@ -13,5 +13,5 @@
 -- 클라이언트도 같은 목록을 쓴다: packages/api의 UPLOAD_IMAGE_TYPES.
 
 update storage.buckets
-set allowed_mime_types = array['image/webp', 'image/jpeg']
+set allowed_mime_types = array['image/webp', 'image/jpeg', 'image/png']
 where id = 'exhibit-images';
