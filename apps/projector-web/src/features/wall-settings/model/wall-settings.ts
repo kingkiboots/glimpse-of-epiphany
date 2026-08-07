@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
-
 export type WallSettings = {
   /** 사진 칸 수. 18칸 패턴을 세로로 반복해 늘린다. */
   slotCount: number;
@@ -34,7 +32,7 @@ const sanitize = (
   return Math.min(bounds.max, Math.max(bounds.min, Math.round(parsed)));
 };
 
-const loadSettings = (): WallSettings => {
+export const loadSettings = (): WallSettings => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
 
@@ -57,24 +55,10 @@ const loadSettings = (): WallSettings => {
   }
 };
 
-/**
- * 운영자가 행사 중 화면 앞에서 만지는 값이라 새로고침에도 유지되어야 한다.
- * localStorage에 저장한다.
- */
-export const useWallSettings = () => {
-  const [settings, setSettings] = useState<WallSettings>(loadSettings);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    } catch {
-      // 저장이 안 되면 새로고침 때 기본값으로 돌아갈 뿐이다. 화면을 막지 않는다.
-    }
-  }, [settings]);
-
-  const update = useCallback((patch: Partial<WallSettings>) => {
-    setSettings((prev) => ({ ...prev, ...patch }));
-  }, []);
-
-  return { settings, update };
+export const saveSettings = (settings: WallSettings): void => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch {
+    // 저장이 안 되면 새로고침 때 기본값으로 돌아갈 뿐이다. 화면을 막지 않는다.
+  }
 };

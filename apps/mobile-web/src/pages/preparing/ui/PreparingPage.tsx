@@ -3,7 +3,7 @@ import Spinner from "@/shared/ui/Spinner";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import styles from "./PreparingPage.module.css";
-import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
+import { useBibleVerse } from "@/features/bible-verse";
 import { useExhibitDraft } from "@/entities/exhibit";
 import { compressForUpload } from "@/shared/lib/image";
 

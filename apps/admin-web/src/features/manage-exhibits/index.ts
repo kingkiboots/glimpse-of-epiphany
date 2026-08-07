@@ -1,1 +1,1 @@
-export { useExhibits } from "./model/use-exhibits";
+export { useExhibits } from "./lib/use-exhibits";

@@ -1,1 +1,1 @@
-export { useSubmitExhibit } from "./model/use-submit-exhibit";
+export { useSubmitExhibit } from "./lib/use-submit-exhibit";

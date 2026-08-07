@@ -1,8 +1,5 @@
 import { useRef, type MouseEventHandler } from "react";
-import {
-  SETTING_BOUNDS,
-  type WallSettings,
-} from "../model/use-wall-settings";
+import { SETTING_BOUNDS, type WallSettings } from "../model/wall-settings";
 import styles from "./WallSettingsDialog.module.css";
 
 type WallSettingsDialogProps = {

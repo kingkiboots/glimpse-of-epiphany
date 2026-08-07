@@ -1,4 +1,4 @@
-import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
+import { useBibleVerse } from "@/features/bible-verse";
 import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
 import { useNavigate } from "@tanstack/react-router";

@@ -1,1 +1,1 @@
-export { useSaveExhibitImage } from "./model/use-save-exhibit-image";
+export { useSaveExhibitImage } from "./lib/use-save-exhibit-image";

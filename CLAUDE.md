@@ -42,8 +42,16 @@
   - `app`, `shared`는 슬라이스(slice)가 없는 레이어입니다. 레이어 바로 아래에 세그먼트(`ui`, `lib`, `styles`, `config`, `api` 등)가 옵니다.
     - 예) `app/styles/global.css`, `shared/ui/Button/`, `shared/lib/`, `shared/api/`
   - `pages`, `widgets`, `features`, `entities`는 슬라이스가 있는 레이어입니다. 반드시 `레이어/슬라이스/세그먼트` 3단계 구조를 따릅니다.
-    - 예) `widgets/loading-screen/ui/LoadingScreen.tsx`, `features/upload-image/model/useUpload.ts`, `entities/photo/model/types.ts`
+    - 예) `widgets/loading-screen/ui/LoadingScreen.tsx`, `features/upload-image/lib/use-upload.ts`, `entities/photo/model/types.ts`
   - 각 슬라이스 루트에는 `index.ts`로 공개 API(barrel)를 두고, 슬라이스 외부에서는 반드시 이 `index.ts`를 통해서만 import 합니다 (세그먼트 내부 파일을 직접 import 금지).
+- **Segment Rule (lib vs model):** 슬라이스가 있는 레이어(`pages`, `widgets`, `features`, `entities`)에서는 다음 기준으로 나눕니다.
+  - `lib`: **React 훅**만 둡니다. 파일명은 `use-*.ts`.
+    - 예) `features/wall-settings/lib/use-wall-settings.ts`
+  - `model`: **React에 의존하지 않는 로직** — 순수 함수, 타입, 상수, 컨텍스트 객체.
+    - 예) `features/wall-settings/model/wall-settings.ts`, `entities/exhibit/model/types.ts`
+  - 훅 파일 안에 순수 함수/타입/상수를 같이 두지 말고 `model`로 빼서 훅이 그것을 import 하게 합니다. 단, 훅 자신의 시그니처에만 쓰이는 옵션 타입이나 상수 하나 정도는 훅 파일에 그대로 둡니다.
+  - Context Provider 컴포넌트는 화면에 그리는 UI가 아니라 상태 저장소이므로 `ui`가 아니라 `model`에 둡니다. (예: `entities/exhibit/model/ExhibitDraftProvider.tsx`)
+  - `shared`에는 이 규칙을 적용하지 않습니다. `shared/lib`은 FSD 표준대로 공용 유틸 자리로 유지합니다 (`shared`에는 `model` 세그먼트를 만들지 않습니다).
 
 ## AI Coding Agent (Claude) Guidelines
 

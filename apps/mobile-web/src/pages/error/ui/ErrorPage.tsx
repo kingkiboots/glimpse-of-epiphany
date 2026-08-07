@@ -1,4 +1,4 @@
-import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
+import { useBibleVerse } from "@/features/bible-verse";
 import {
   DEFAULT_ERROR_MESSAGE,
   ERROR_TYPES,

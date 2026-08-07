@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ExhibitDraftContext } from "./exhibit-draft-context";
-import type { ExhibitDraftContextValue } from "./types";
+import { ExhibitDraftContext } from "../model/exhibit-draft-context";
+import type { ExhibitDraftContextValue } from "../model/types";
 
 export const useExhibitDraft = (): ExhibitDraftContextValue => {
   const value = useContext(ExhibitDraftContext);

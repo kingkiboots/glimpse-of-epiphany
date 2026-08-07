@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getCurrentDate } from "@packages/utils";
 import { useExhibitDraft } from "@/entities/exhibit";
 import { useScreenBackgroundUrl } from "@/shared/lib/screen-background";
-import { renderExhibitCard } from "../lib/render-exhibit-card";
-import { saveImageFile } from "../lib/save-image-file";
+import { renderExhibitCard } from "../model/render-exhibit-card";
+import { saveImageFile } from "../model/save-image-file";
 
 /**
  * 미리보기 카드를 이미지로 만들어 사용자에게 넘긴다.

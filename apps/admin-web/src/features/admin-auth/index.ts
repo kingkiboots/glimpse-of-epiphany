@@ -1,1 +1,1 @@
-export { useAdminSession } from "./model/use-admin-session";
+export { useAdminSession } from "./lib/use-admin-session";

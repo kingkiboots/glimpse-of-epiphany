@@ -1,1 +1,1 @@
-export { useWallScroll } from "./model/use-wall-scroll";
+export { useWallScroll } from "./lib/use-wall-scroll";
