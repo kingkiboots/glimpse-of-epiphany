@@ -9,6 +9,8 @@ export type { Session } from "./src/auth";
 export {
   EXHIBIT_IMAGE_BUCKET,
   EXHIBIT_TTL_HOURS,
+  MAX_UPLOAD_BYTES,
+  UPLOAD_IMAGE_TYPES,
   createExhibit,
   deleteExhibit,
   fetchExhibits,

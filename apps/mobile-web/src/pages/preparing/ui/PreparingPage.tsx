@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import styles from "./PreparingPage.module.css";
 import { useBibleVerse } from "@/features/bible-verse/lib/use-bible-verse";
 import { useExhibitDraft } from "@/entities/exhibit";
-import { compressToWebp } from "@/shared/lib/image";
+import { compressForUpload } from "@/shared/lib/image";
 
 /** 성구를 읽을 시간을 주기 위한 최소 노출 시간. 변환이 더 걸리면 끝날 때까지 기다린다. */
 const MINIMUM_DURATION_MS = 5000;
@@ -33,9 +33,9 @@ const PreparingPage = () => {
       timeoutId = setTimeout(resolve, MINIMUM_DURATION_MS);
     });
 
-    // 이 화면이 떠 있는 동안 실제로 webp 변환을 돌린다. 덕분에 제출 때는 업로드만 남는다.
+    // 이 화면이 떠 있는 동안 실제로 변환을 돌린다. 덕분에 제출 때는 업로드만 남는다.
     // 업로드까지 당기지는 않는다. 참가자가 아직 전시에 동의하지 않은 시점이다.
-    Promise.all([compressToWebp(file), minimumWait])
+    Promise.all([compressForUpload(file), minimumWait])
       .then(([compressed]) => {
         if (!active) {
           return;

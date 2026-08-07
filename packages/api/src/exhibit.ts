@@ -7,6 +7,26 @@ import type { ExhibitRow } from "./types";
 export const EXHIBIT_IMAGE_BUCKET = "exhibit-images";
 
 /**
+ * 업로드를 허용하는 이미지 타입. 마이그레이션의 `allowed_mime_types`와 같아야 한다.
+ *
+ * webp가 기본이지만 jpeg도 받는다. 일부 인앱 브라우저(카카오톡 등)는 캔버스로 webp를
+ * 인코딩하지 못하는데, 그 경우 브라우저가 오류 없이 PNG를 돌려주고 무손실이라 압축이
+ * 되지 않아 업로드가 통째로 막힌다. jpeg를 열어두면 그런 기기도 전시에 참여할 수 있다.
+ */
+export const UPLOAD_IMAGE_TYPES: readonly string[] = ["image/webp", "image/jpeg"];
+
+/**
+ * 파일 하나의 상한. 마이그레이션의 `file_size_limit`과 같아야 한다.
+ * 클라이언트 목표치는 300KB이고, 이 값은 그것을 못 맞췄을 때 걸리는 최종 방어선이다.
+ */
+export const MAX_UPLOAD_BYTES = 1_048_576;
+
+const EXTENSION_BY_TYPE: Record<string, string> = {
+  "image/webp": "webp",
+  "image/jpeg": "jpg",
+};
+
+/**
  * 전시물이 남아 있는 시간(시간 단위).
  *
  * 전시가 2시간 반이라 초반에 올린 사진은 행사가 끝나기 전에 사라진다. 다만 프로젝터
@@ -38,7 +58,7 @@ export type Exhibit = {
 };
 
 export type CreateExhibitInput = {
-  /** webp로 변환·압축이 끝난 이미지 파일 */
+  /** 변환·압축이 끝난 이미지 파일 (UPLOAD_IMAGE_TYPES 중 하나) */
   imageFile: File;
   message: string;
   /**
@@ -77,12 +97,26 @@ export const createExhibit = async ({
   clientId = null,
 }: CreateExhibitInput): Promise<Exhibit> => {
   const supabase = getSupabaseClient();
-  const imagePath = `${randomUuid()}.webp`;
+
+  // 타입을 여기서 다시 확인한다. 잘못된 값이 오면 Storage가 413이나 400으로
+  // 되돌려주는데, 그 메시지만으로는 무엇이 잘못됐는지 알 수 없다.
+  if (!UPLOAD_IMAGE_TYPES.includes(imageFile.type)) {
+    throw new Error(`지원하지 않는 이미지 형식입니다: ${imageFile.type}`);
+  }
+
+  if (imageFile.size > MAX_UPLOAD_BYTES) {
+    throw new Error(
+      `이미지가 너무 큽니다: ${Math.round(imageFile.size / 1024)}KB ` +
+        `(최대 ${Math.round(MAX_UPLOAD_BYTES / 1024)}KB)`,
+    );
+  }
+
+  const imagePath = `${randomUuid()}.${EXTENSION_BY_TYPE[imageFile.type]}`;
 
   const { error: uploadError } = await supabase.storage
     .from(EXHIBIT_IMAGE_BUCKET)
     .upload(imagePath, imageFile, {
-      contentType: "image/webp",
+      contentType: imageFile.type,
       cacheControl: `${EXHIBIT_CACHE_SECONDS}`,
       upsert: false,
     });

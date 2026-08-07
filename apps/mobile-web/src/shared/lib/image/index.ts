@@ -1,1 +1,1 @@
-export { compressToWebp } from "./compress-to-webp";
+export { compressForUpload } from "./compress-for-upload";

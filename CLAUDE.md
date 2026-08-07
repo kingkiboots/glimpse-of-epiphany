@@ -59,7 +59,7 @@
 
 - 커스텀 REST API 서버를 생성하거나 가정하지 마십시오.
 - 모든 데이터 통신 및 파일 업로드는 프론트엔드에서 Supabase Client 객체를 통해 다이렉트로 수행합니다.
-- 이미지 파일 업로드 전, 클라이언트 측에서 `browser-image-compression`을 활용하여 최대 300KB로 압축하는 로직을 반드시 포함하십시오.
+- 이미지 파일 업로드 전, 클라이언트 측에서 `browser-image-compression`을 활용해 압축합니다. 이 라이브러리의 `maxSizeMB`는 보장이 아니라 시도(최대 10회)이므로, **결과의 크기와 실제 MIME 타입을 업로드 전에 반드시 확인**하십시오. 허용 타입은 `packages/api`의 `UPLOAD_IMAGE_TYPES`와 마이그레이션의 `allowed_mime_types`가 함께 바뀌어야 합니다.
 - Supabase 접근은 반드시 `@packages/api`를 통해서만 합니다. 앱 코드에서 `@supabase/supabase-js`를 직접 import 하지 마십시오.
 - DB 스키마 변경은 `supabase/migrations/*.sql`에만 작성합니다. MCP나 대시보드로 DDL을 직접 적용하지 마십시오 (레포와 실제 DB가 어긋납니다).
 - 스키마 변경 후 `packages/api/src/database.types.ts`는 `pnpm gen:db-types`로 재생성합니다. 직접 수정하지 마십시오.
