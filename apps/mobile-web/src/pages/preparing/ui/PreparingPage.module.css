@@ -3,6 +3,14 @@
   --page-body-gap: 44px;
 }
 
+/*
+ * 셸의 .footer가 이미 padding-top 12px을 갖고 있어 여기서는 나머지만 채운다.
+ * Figma: Loading... 하단 449 → 성구 상단 497
+ */
+.body {
+  padding-bottom: 36px;
+}
+
 .loading {
   display: flex;
   flex-direction: column;

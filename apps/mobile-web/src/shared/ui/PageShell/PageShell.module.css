@@ -9,12 +9,14 @@
    */
   min-height: 100%;
   /*
-   * --page-title-offset: 제목이 시작하는 높이. Figma(t3HFRn2cLh8e6dpBuF6B5Q)의
-   * 375x812 프레임 기준 title y 좌표를 그대로 쓴다. 시작·로딩·완료·에러가 283px,
-   * 작성·전시가 87px이라 후자만 각 페이지에서 덮어쓴다.
-   * 위아래는 값이 다르므로 한 축으로 묶지 않는다.
+   * --page-title-offset: 제목이 시작하는 높이. 기본값은 시작·로딩·완료·에러가 쓰고,
+   * 작성·전시(87px)만 각 페이지에서 덮어쓴다. 위아래는 값이 다르므로 한 축으로 묶지 않는다.
+   *
+   * Figma(t3HFRn2cLh8e6dpBuF6B5Q) 375x812 프레임의 title y는 283px이지만, 그 값이면
+   * 375x667(iPhone SE)에서 시작 화면이 세로로 넘친다. 실제 화면을 보고 정한 값이므로
+   * Figma 좌표보다 이쪽이 우선이다.
    */
-  padding: var(--page-title-offset, 283px) 24px var(--page-bottom-space, 80px);
+  padding: var(--page-title-offset, 200px) 24px var(--page-bottom-space, 80px);
   text-align: center;
   /*
    * align-items 기본값(stretch)을 유지한다. center로 바꾸면 하단 영역이 콘텐츠 크기만큼만
@@ -38,18 +40,22 @@
   flex-direction: column;
 }
 
+/* footerPlacement="flow". 본문 바로 뒤에 이어붙는다. */
 .footer {
   display: flex;
   flex-direction: column;
-  /*
-   * 남는 공간을 전부 흡수해 하단을 바닥으로 내린다. 콘텐츠가 화면을 넘기면 남는
-   * 공간이 없어 0이 되고, 그대로 흘러서 화면이 스크롤된다.
-   */
-  margin-top: auto;
   padding-top: 12px;
   /*
-   * 여기서도 align-items를 center로 잡지 않는다. 하단에 버튼을 묶는 래퍼 div를 두는
+   * 여기서 align-items를 center로 잡지 않는다. 하단에 버튼을 묶는 래퍼 div를 두는
    * 화면(confirm)에서 그 래퍼가 shrink-to-fit이 되면 위와 같은 순환 참조가 생긴다.
    * Button을 직접 자식으로 두는 화면만 각자 center를 켠다.
    */
+}
+
+/*
+ * footerPlacement="bottom". 남는 공간을 전부 흡수해 하단을 바닥으로 내린다.
+ * 콘텐츠가 화면을 넘기면 남는 공간이 없어 0이 되고, 그대로 흘러서 화면이 스크롤된다.
+ */
+.footerBottom {
+  margin-top: auto;
 }

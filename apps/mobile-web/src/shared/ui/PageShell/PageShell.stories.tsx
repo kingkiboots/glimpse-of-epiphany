@@ -53,6 +53,15 @@ export const Default: Story = {
   },
 };
 
+/** footerPlacement="flow". 하단이 바닥으로 내려가지 않고 본문 바로 뒤에 이어붙는다. */
+export const FlowingFooter: Story = {
+  args: {
+    footerPlacement: "flow",
+    children: <p>로딩·완료·에러 화면처럼 하단이 본문의 연장인 경우.</p>,
+    footer: <p>에베소서 5:20</p>,
+  },
+};
+
 /** 콘텐츠가 화면보다 길면 제목까지 포함해 화면 전체가 스크롤된다. */
 export const Scrolling: Story = {
   args: {

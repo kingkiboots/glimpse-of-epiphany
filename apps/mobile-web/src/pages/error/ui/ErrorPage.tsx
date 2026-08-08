@@ -26,6 +26,7 @@ const ErrorPage = () => {
   return (
     <PageShell
       className={styles.shell}
+      footerPlacement="flow"
       footerClassName={styles.footer}
       footer={
         <>

@@ -68,6 +68,8 @@ const PreparingPage = () => {
   return (
     <PageShell
       className={styles.shell}
+      bodyClassName={styles.body}
+      footerPlacement="flow"
       footer={
         <div className={styles.verse}>
           <p className={styles.verseReference}>
