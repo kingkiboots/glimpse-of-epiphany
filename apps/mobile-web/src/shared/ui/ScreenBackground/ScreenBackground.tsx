@@ -16,14 +16,15 @@ const ScreenBackground = ({
   scrim,
 }: ScreenBackgroundProps) => {
   return (
-    <div
-      className={cn(styles.screen, className)}
-      style={
-        backgroundImageUrl
-          ? { backgroundImage: `url(${backgroundImageUrl})` }
-          : undefined
-      }
-    >
+    <div className={cn(styles.screen, className)}>
+      <div
+        className={styles.backdrop}
+        style={
+          backgroundImageUrl
+            ? { backgroundImage: `url(${backgroundImageUrl})` }
+            : undefined
+        }
+      />
       <div className={scrim ? styles.scrim : styles.overlay} />
       <div className={styles.content}>{children}</div>
     </div>

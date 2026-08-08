@@ -16,6 +16,12 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
+    <!--
+      일반 Safari 탭에서는 상태바와 하단 툴바가 브라우저 UI라 사진이 거기까지 올라가지
+      못한다. 대신 이 색으로 칠해져서, 기본값인 흰색 대신 화면 배경과 이어져 보인다.
+      (global.css의 --color-bg와 같은 값이어야 한다. HTML이라 변수를 쓸 수 없다.)
+    -->
+    <meta name="theme-color" content="#000000" />
     <title>일상 속 감사 찾기 - 삶으로 쓰는 예배전(展)</title>
     <meta
       name="description"

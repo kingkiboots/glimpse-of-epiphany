@@ -1,10 +1,12 @@
+/*
+ * 높이를 뷰포트에 잠그지 않는다. 콘텐츠가 길면 문서 자체가 길어지고 window가 스크롤되며,
+ * 그래야 iOS Safari가 하단 툴바를 알약으로 접어 safe area를 내어준다. 안쪽 div에
+ * overflow-y를 걸어 스크롤시키면 Safari 입장에선 "스크롤하지 않는 페이지"라 툴바가
+ * 계속 펼쳐진 채로 남는다.
+ */
 .screen {
   position: relative;
-  height: 100%;
-  overflow: hidden;
   background-color: var(--color-bg);
-  background-size: cover;
-  background-position: center;
   color: var(--color-text);
 
   /* Safe Area */
@@ -12,26 +14,33 @@
   padding-bottom: calc(env(safe-area-inset-bottom));
 }
 
-.overlay {
-  position: absolute;
+/*
+ * 배경 사진과 그 위 그라데이션은 문서가 스크롤돼도 따라 올라가면 안 되므로 뷰포트에
+ * 고정한다. .screen에 붙여두면 문서와 함께 밀려 올라가 아래쪽이 맨 배경색으로 드러난다.
+ */
+.backdrop,
+.overlay,
+.scrim {
+  position: fixed;
   inset: 0;
+  z-index: 0;
+}
+
+.backdrop {
+  background-color: var(--color-bg);
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
   background: var(--gradient-image-overlay);
 }
 
 .scrim {
-  position: absolute;
-  inset: 0;
   background: var(--gradient-image-scrim);
 }
 
-/*
- * 화면 전체가 스크롤되는 층. 배경 사진과 스크림은 .screen에 붙어 있어 같이 밀려 올라가지
- * 않고 제자리에 남는다. (.screen 자체에 스크롤을 걸면 inset:0인 스크림이 함께 스크롤돼
- * 첫 화면 아래로는 스크림이 사라진다.)
- */
 .content {
   position: relative;
   z-index: 1;
-  height: 100%;
-  overflow-y: auto;
 }

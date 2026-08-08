@@ -17,20 +17,26 @@ const meta = {
       const bgImageUrl = useMemo(() => getRandomBackgroundImageUrl(), []);
 
       return (
-        // 실제 화면과 같은 조건에서 봐야 스크롤 동작을 확인할 수 있다. 배경은 제자리에
-        // 두고 그 위 층만 스크롤시키는 ScreenBackground의 구조를 그대로 흉내낸다.
-        <div
-          style={{
-            height: "100dvh",
-            overflow: "hidden",
-            color: "var(--color-text)",
-            background: `center / cover no-repeat url("${bgImageUrl}")`,
-          }}
-        >
-          <div style={{ height: "100%", overflowY: "auto" }}>
+        // 배경은 뷰포트에 고정하고 문서가 스크롤되는 ScreenBackground의 구조를 흉내낸다.
+        <>
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 0,
+              background: `center / cover no-repeat url("${bgImageUrl}")`,
+            }}
+          />
+          <div
+            style={{
+              position: "relative",
+              zIndex: 1,
+              color: "var(--color-text)",
+            }}
+          >
             <Story />
           </div>
-        </div>
+        </>
       );
     },
   ],
