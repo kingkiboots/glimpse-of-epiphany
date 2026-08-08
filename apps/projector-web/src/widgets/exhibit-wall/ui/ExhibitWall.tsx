@@ -1,7 +1,12 @@
 import { useRef } from "react";
 import type { WallSlot } from "@/features/sync-exhibit-wall";
 import { useWallScroll } from "@/features/wall-scroll";
-import { WALL_WIDTH, getSlotPosition, getScrollDistance } from "@/shared/consts";
+import {
+  WALL_WIDTH,
+  WALL_VIEWPORT_HEIGHT,
+  getSlotPosition,
+  getScrollDistance,
+} from "@/shared/consts";
 import { useViewportScale } from "../lib/use-viewport-scale";
 import ExhibitCard from "./ExhibitCard";
 import styles from "./ExhibitWall.module.css";
@@ -28,6 +33,29 @@ const ExhibitWall = ({ slots, speed }: ExhibitWallProps) => {
 
   useWallScroll(stripRef, { distance, speed });
 
+  // 순환 스크롤용 복제 한 벌의 위치. 정지 지점에서 화면 한 판을 더 내려간 곳에
+  // 스트립이 다시 시작하도록 두면 마지막 줄 아래에서 처음 줄이 올라오고,
+  // 스크롤 훅은 그 지점에서 y를 0으로 되돌린다(두 화면이 똑같아 끊김이 없다).
+  const wrapOffset = distance > 0 ? distance + WALL_VIEWPORT_HEIGHT : null;
+
+  const renderCards = (offsetY: number, keySuffix: string) =>
+    slots.map((slot, index) => {
+      if (!slot) {
+        return null;
+      }
+
+      const { x, y } = getSlotPosition(index);
+
+      return (
+        <ExhibitCard
+          key={slot.exhibit.id + keySuffix}
+          exhibit={slot.exhibit}
+          x={x}
+          y={y + offsetY}
+        />
+      );
+    });
+
   return (
     <div className={styles.viewport}>
       <div
@@ -39,22 +67,8 @@ const ExhibitWall = ({ slots, speed }: ExhibitWallProps) => {
         }}
       >
         <div ref={stripRef} className={styles.strip}>
-          {slots.map((slot, index) => {
-            if (!slot) {
-              return null;
-            }
-
-            const { x, y } = getSlotPosition(index);
-
-            return (
-              <ExhibitCard
-                key={slot.exhibit.id}
-                exhibit={slot.exhibit}
-                x={x}
-                y={y}
-              />
-            );
-          })}
+          {renderCards(0, "")}
+          {wrapOffset !== null && renderCards(wrapOffset, ":wrap")}
         </div>
       </div>
     </div>

@@ -67,16 +67,18 @@ export const getSlotPosition = (index: number): { x: number; y: number } => {
 export const WALL_VIEWPORT_HEIGHT = PATTERN_Y[7] + CARD_HEIGHT;
 
 /**
- * 슬라이딩 정지 지점은 칸 단위가 아니라 묶음 단위로 끊긴다(9~12칸 → A,
- * 13~16칸 → B, 17~18칸 → 끝). 어긋난 격자라 묶음 중간에서 멈추면 잘린 것처럼
- * 보이기 때문이다. 첫 묶음(0~7)의 끝이 정확히 화면 한 판 높이와 같아서,
- * "8칸까지는 움직이지 않는다"도 같은 식 하나로 계산된다.
+ * 처음 줄이 다시 이어 붙는 지점은 칸 단위가 아니라 묶음 단위로 끊긴다
+ * (9~12칸 → A, 13~16칸 → B, 17~18칸 → 끝). 어긋난 격자라 묶음 중간에서
+ * 잘라 붙이면 격자가 어색하게 섞여 보이기 때문이다. 첫 묶음(0~7)의 끝이
+ * 정확히 화면 한 판 높이와 같아서, "8칸까지는 움직이지 않는다"도 같은 식
+ * 하나로 계산된다.
  */
 const GROUP_END_INDICES: readonly number[] = [7, 11, 15, 17];
 
 /**
- * 채워진 마지막 칸이 화면 바닥에 닿을 때까지 내려가야 하는 거리(벽 좌표계 px).
- * 0이면 슬라이딩하지 않는다.
+ * 채워진 마지막 묶음이 화면 바닥에 닿을 때까지 내려갈 거리(벽 좌표계 px).
+ * 순환 스크롤은 이 지점 아래에 복제 스트립을 이어 붙인다. 0이면 슬라이딩하지
+ * 않는다.
  */
 export const getScrollDistance = (maxOccupiedIndex: number): number => {
   if (maxOccupiedIndex < 0) {
