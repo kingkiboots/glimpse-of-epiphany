@@ -65,6 +65,24 @@
   text-align: right;
 }
 
+.directionOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  grid-column: 1 / -1;
+}
+
+.directionOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.directionOption input[type="radio"] {
+  accent-color: #fff;
+}
+
 .hint {
   color: rgb(255 255 255 / 50%);
   font-size: 12px;

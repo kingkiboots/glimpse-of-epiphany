@@ -7,15 +7,14 @@
 }
 
 /*
- * 벽 좌표계를 화면에 앉히는 층. 폭·왼쪽 여백·배율은 TS 상수에서 오므로 인라인로
- * 넣는다. left 50% + 음수 margin으로 가운데를 잡고, transform-origin이 top
- * center라 축소해도 중심선이 화면 중앙에 남는다.
+ * 벽 좌표계를 화면에 앉히는 층. 폭·여백·배율·기준점은 방향 설정에 따라 계산되어
+ * 인라인 스타일로 들어온다. 세로 방향은 left 50% + 음수 margin으로 가운데를
+ * 잡고(top center 기준이라 축소해도 중심선이 화면 중앙에 남는다), 가로 방향은
+ * 왼쪽 위 기준으로 눕힌다.
  */
 .scaler {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform-origin: top center;
 }
 
 .strip {

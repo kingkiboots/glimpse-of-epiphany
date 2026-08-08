@@ -1,5 +1,10 @@
 import { useRef, type MouseEventHandler } from "react";
-import { SETTING_BOUNDS, type WallSettings } from "../model/wall-settings";
+import {
+  DIRECTION_OPTIONS,
+  SETTING_BOUNDS,
+  type WallDirection,
+  type WallSettings,
+} from "../model/wall-settings";
 import styles from "./WallSettingsDialog.module.css";
 import { useCheatSettingsButtonActive } from "../lib/use-cheat-settings-button-active";
 
@@ -81,9 +86,46 @@ const WallSettingsDialog = ({
             <output className={styles.fieldValue}>{settings.slotCount}</output>
           </label>
 
+          <label className={styles.field}>
+            <span className={styles.fieldLabel}>컬럼 간격</span>
+            <input
+              type="range"
+              min={SETTING_BOUNDS.columnGap.min}
+              max={SETTING_BOUNDS.columnGap.max}
+              step={SETTING_BOUNDS.columnGap.step}
+              value={settings.columnGap}
+              onChange={(event) =>
+                onUpdate({ columnGap: Number(event.target.value) })
+              }
+            />
+            <output className={styles.fieldValue}>{settings.columnGap}</output>
+          </label>
+
+          <div className={styles.field} role="radiogroup" aria-label="슬라이드 방향">
+            <span className={styles.fieldLabel}>슬라이드 방향</span>
+            <div className={styles.directionOptions}>
+              {DIRECTION_OPTIONS.map((option) => (
+                <label key={option.value} className={styles.directionOption}>
+                  <input
+                    type="radio"
+                    name="wall-direction"
+                    value={option.value}
+                    checked={settings.direction === option.value}
+                    onChange={(event) =>
+                      onUpdate({
+                        direction: event.target.value as WallDirection,
+                      })
+                    }
+                  />
+                  <span>{option.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
           <p className={styles.hint}>
-            칸을 늘리면 한 사진이 화면에 더 오래 남습니다. 변경은 즉시
-            적용됩니다.
+            칸을 늘리면 한 사진이 화면에 더 오래 남습니다. 좌우 방향은 벽을
+            눕혀서 흘립니다. 변경은 즉시 적용됩니다.
           </p>
 
           <button

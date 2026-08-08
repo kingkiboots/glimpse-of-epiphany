@@ -10,7 +10,7 @@ const WallPage = () => {
 
   return (
     <main className={styles.root}>
-      <ExhibitWall slots={slots} speed={settings.speed} />
+      <ExhibitWall slots={slots} settings={settings} />
       <WallSettingsDialog settings={settings} onUpdate={update} />
     </main>
   );
