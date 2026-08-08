@@ -1,4 +1,5 @@
 import { ROUTE_PATHS } from "@/shared/consts";
+import PageShell from "@/shared/ui/PageShell";
 import Spinner from "@/shared/ui/Spinner";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -65,21 +66,22 @@ const PreparingPage = () => {
   }, [file, navigate, setCompressedFile]);
 
   return (
-    <div className={styles.content}>
-      <header>
-        <h1 className={styles.title}>일상 속 감사 찾기</h1>
-      </header>
+    <PageShell
+      className={styles.shell}
+      footer={
+        <div className={styles.verse}>
+          <p className={styles.verseReference}>
+            {book} {chapter}:{verse}
+          </p>
+          <p className={styles.verseText}>{text}</p>
+        </div>
+      }
+    >
       <div className={styles.loading}>
         <Spinner size={48} />
         <span className={styles.loadingLabel}>Loading...</span>
       </div>
-      <div className={styles.verse}>
-        <p className={styles.verseReference}>
-          {book} {chapter}:{verse}
-        </p>
-        <p className={styles.verseText}>{text}</p>
-      </div>
-    </div>
+    </PageShell>
   );
 };
 

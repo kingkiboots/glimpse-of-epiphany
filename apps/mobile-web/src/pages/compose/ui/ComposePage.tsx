@@ -1,6 +1,7 @@
 import Button from "@/shared/ui/Button";
 import ImageBox from "@/shared/ui/ImageBox";
 import Input from "@/shared/ui/Input";
+import PageShell from "@/shared/ui/PageShell";
 import Panel from "@/shared/ui/Panel";
 import { useEffect, useId } from "react";
 
@@ -32,10 +33,21 @@ const ComposePage = () => {
   }
 
   return (
-    <div className={styles.content}>
-      <header className={styles.textArea}>
-        <h1 className={styles.title}>일상 속 감사 찾기</h1>
-      </header>
+    <PageShell
+      className={styles.shell}
+      bodyClassName={styles.body}
+      footerClassName={styles.ctaArea}
+      footer={
+        <>
+          <p id="cta-caption" className={styles.ctaCaption}>
+            *내용은 공유되지 않습니다.
+          </p>
+          <Button aria-describedby="cta-caption" onClick={handleSubmit}>
+            작성 완료
+          </Button>
+        </>
+      }
+    >
       <div className={styles.imageBoxArea}>
         <Panel radius="panel" padding="8px" width={272} height={247}>
           <ImageBox src={previewUrl} />
@@ -51,15 +63,7 @@ const ComposePage = () => {
           <Input id={id} value={message} onChange={setMessage} />
         </Panel>
       </div>
-      <div className={styles.ctaArea}>
-        <p id="cta-caption" className={styles.ctaCaption}>
-          *내용은 공유되지 않습니다.
-        </p>
-        <Button aria-describedby="cta-caption" onClick={handleSubmit}>
-          작성 완료
-        </Button>
-      </div>
-    </div>
+    </PageShell>
   );
 };
 

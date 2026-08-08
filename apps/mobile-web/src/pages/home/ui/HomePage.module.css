@@ -1,41 +1,13 @@
-.content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 30px;
-  padding: 80px 24px;
-  text-align: center;
-  /*
-   * align-items 기본값(stretch)을 유지한다. center로 바꾸면 .ctaArea가 콘텐츠 크기만큼만
-   * 차지(shrink-to-fit)해서, 그 안의 Button이 쓰는 width: min(226px, 100%)가 "부모 폭이
-   * 자식에 의존하는데 자식은 부모 폭에 의존하는" 순환 참조에 빠진다.
-   */
+.shell {
+  /* Figma: 제목 하단 318 → 설명 문구 373 */
+  --page-body-gap: 55px;
 }
 
-.textArea {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-grow: 1;
-  /* flex item 기본 min-height:auto는 콘텐츠가 넘칠 때 축소 동작이 브라우저마다 달라진다 */
-  min-height: 0;
-  gap: 56px;
-}
-
-.title {
-  composes: title from "@/shared/styles/typography.module.css";
-}
-
-.body {
+.description {
   composes: body from "@/shared/styles/typography.module.css";
 }
 
 .ctaArea {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 6px;
   padding-bottom: 18px;

@@ -1,3 +1,4 @@
+export { APP_TITLE } from "./app";
 export { RADIUS } from "./radius";
 export { GLASS_EFFECT } from "./glass";
 export {

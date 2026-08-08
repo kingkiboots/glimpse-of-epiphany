@@ -1,5 +1,6 @@
 import { ROUTE_PATHS } from "@/shared/consts";
 import Button from "@/shared/ui/Button";
+import PageShell from "@/shared/ui/PageShell";
 import Panel from "@/shared/ui/Panel";
 import { getCurrentDate } from "@packages/utils";
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
@@ -50,10 +51,36 @@ const ConfirmPage = () => {
   }
 
   return (
-    <div className={styles.content}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>일상 속 감사 찾기</h1>
-      </header>
+    <PageShell
+      className={styles.shell}
+      bodyClassName={styles.body}
+      footerClassName={styles.ctaArea}
+      footer={
+        <>
+          <p id="cta-caption" className={styles.ctaCaption}>
+            *내용은 공유되지 않습니다.
+          </p>
+          <div className={styles.ctaButtonGroup}>
+            <Button
+              aria-describedby="cta-caption"
+              onClick={handleSubmitClick}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "전시하는 중..." : "이미지 전시하기"}
+            </Button>
+            <Button
+              onClick={handleSaveClick}
+              disabled={!isImageReady || isSaving || isSubmitting}
+            >
+              {isSaving ? "저장하는 중..." : "저장하기"}
+            </Button>
+            <Button onClick={handlePrevStepClick} disabled={isSubmitting}>
+              이전으로
+            </Button>
+          </div>
+        </>
+      }
+    >
       <div className={styles.previewContainer}>
         <Panel
           radius="panel"
@@ -88,30 +115,7 @@ const ConfirmPage = () => {
           </div>
         </Panel>
       </div>
-      <div className={styles.ctaArea}>
-        <p id="cta-caption" className={styles.ctaCaption}>
-          *내용은 공유되지 않습니다.
-        </p>
-        <div className={styles.ctaButtonGroup}>
-          <Button
-            aria-describedby="cta-caption"
-            onClick={handleSubmitClick}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "전시하는 중..." : "이미지 전시하기"}
-          </Button>
-          <Button
-            onClick={handleSaveClick}
-            disabled={!isImageReady || isSaving || isSubmitting}
-          >
-            {isSaving ? "저장하는 중..." : "저장하기"}
-          </Button>
-          <Button onClick={handlePrevStepClick} disabled={isSubmitting}>
-            이전으로
-          </Button>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   );
 };
 

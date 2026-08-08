@@ -1,38 +1,16 @@
-.content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-  padding: 60px 24px;
-  text-align: center;
-  /*
-   * align-items 기본값(stretch)을 유지한다. center로 바꾸면 .ctaArea가 콘텐츠 크기만큼만
-   * 차지(shrink-to-fit)해서, 그 안의 Button이 쓰는 width: min(226px, 100%)가 "부모 폭이
-   * 자식에 의존하는데 자식은 부모 폭에 의존하는" 순환 참조에 빠진다.
-   */
+.shell {
+  --page-title-offset: 87px;
+  --page-bottom-space: 60px;
 }
 
-.textArea {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* flex item 기본 min-height:auto는 콘텐츠가 넘칠 때 축소 동작이 브라우저마다 달라진다 */
-  min-height: 0;
-  margin-bottom: 30px;
-}
-
-.title {
-  composes: title from "@/shared/styles/typography.module.css";
+.body {
+  gap: 17px;
+  padding-bottom: 13px;
 }
 
 .imageBoxArea {
   display: flex;
   justify-content: center;
-  margin-bottom: 17px;
 }
 
 .inputArea {
@@ -40,7 +18,6 @@
   flex-direction: column;
   align-items: center;
   gap: 21px;
-  margin-bottom: 13px;
 }
 
 .label {
@@ -49,8 +26,6 @@
 }
 
 .ctaArea {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 6px;
   padding-bottom: 18px;

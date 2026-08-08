@@ -1,0 +1,55 @@
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  /*
+   * height가 아니라 min-height. 화면보다 길어지면 이 박스가 그만큼 자라고, 스크롤은
+   * 바깥(ScreenBackground의 .content)이 맡는다. height로 잠그면 넘친 만큼 잘린다.
+   */
+  min-height: 100%;
+  /*
+   * --page-title-offset: 제목이 시작하는 높이. Figma(t3HFRn2cLh8e6dpBuF6B5Q)의
+   * 375x812 프레임 기준 title y 좌표를 그대로 쓴다. 시작·로딩·완료·에러가 283px,
+   * 작성·전시가 87px이라 후자만 각 페이지에서 덮어쓴다.
+   * 위아래는 값이 다르므로 한 축으로 묶지 않는다.
+   */
+  padding: var(--page-title-offset, 283px) 24px var(--page-bottom-space, 80px);
+  text-align: center;
+  /*
+   * align-items 기본값(stretch)을 유지한다. center로 바꾸면 하단 영역이 콘텐츠 크기만큼만
+   * 차지(shrink-to-fit)해서, 그 안의 Button이 쓰는 width: min(226px, 100%)가 "부모 폭이
+   * 자식에 의존하는데 자식은 부모 폭에 의존하는" 순환 참조에 빠진다.
+   */
+}
+
+/* 셸이 책임지는 건 제목 하나뿐이다. 설명 문구를 비롯한 나머지 텍스트는 본문에 둔다. */
+.header {
+  /* 제목과 본문 첫 요소 사이 간격. 화면마다 달라서 각 페이지가 이 변수만 덮어쓴다. */
+  padding-bottom: var(--page-body-gap, 30px);
+}
+
+.title {
+  composes: title from "@/shared/styles/typography.module.css";
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  /*
+   * 남는 공간을 전부 흡수해 하단을 바닥으로 내린다. 콘텐츠가 화면을 넘기면 남는
+   * 공간이 없어 0이 되고, 그대로 흘러서 화면이 스크롤된다.
+   */
+  margin-top: auto;
+  padding-top: 12px;
+  /*
+   * 여기서도 align-items를 center로 잡지 않는다. 하단에 버튼을 묶는 래퍼 div를 두는
+   * 화면(confirm)에서 그 래퍼가 shrink-to-fit이 되면 위와 같은 순환 참조가 생긴다.
+   * Button을 직접 자식으로 두는 화면만 각자 center를 켠다.
+   */
+}
