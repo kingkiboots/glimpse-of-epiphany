@@ -75,7 +75,7 @@
 ### 3. Security
 
 - `VITE_` 접두사가 붙은 환경변수는 빌드 시 클라이언트 번들에 그대로 노출됩니다. `service_role` 키와 Personal Access Token에는 어떤 이유로도 이 접두사를 붙이지 마십시오.
-- 이 앱의 실제 접근 통제는 키가 아니라 `supabase/migrations`의 RLS 정책입니다. 정책을 수정할 때는 anon이 INSERT 외의 권한을 얻지 않는지 확인하십시오.
+- 이 앱의 실제 접근 통제는 키가 아니라 `supabase/migrations`의 RLS 정책입니다. 정책을 수정할 때는 `public.exhibits`에 대한 anon의 SELECT·INSERT 허용을 유지하고, UPDATE·DELETE 권한이 부여되지 않는지 확인하십시오. Storage 권한은 별도 정책으로 확인하십시오.
 - 자세한 배경은 `supabase/README.md`의 "보안" 절을 참고하십시오.
 
 ### 4. State Management & Animations
