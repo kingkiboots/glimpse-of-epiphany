@@ -8,6 +8,25 @@
 
 ---
 
+## 행사 참여 현장
+
+참가자들이 객석에서 휴대폰으로 사진을 올리면 무대 스크린에 실시간으로 표시됩니다.
+
+![휴대폰으로 참여하는 관객과 사진이 뜬 무대 스크린](./docs/event/audience.jpg)
+
+<details>
+<summary>행사 사진 5장 더 보기</summary>
+
+<img src="./docs/event/auditorium.jpg" alt="객석 옆에서 본 참가자들과 무대 전경" width="300">
+<img src="./docs/event/screen-01.jpg" alt="참가자 사진이 여러 칸에 표시된 스크린" width="300">
+<img src="./docs/event/screen-02.jpg" alt="다른 사진들이 표시된 스크린" width="300">
+<img src="./docs/event/stage-wide.jpg" alt="객석 뒤에서 가로로 촬영한 무대" width="300">
+<img src="./docs/event/stage-portrait.jpg" alt="객석에서 세로로 촬영한 무대와 스크린" width="300">
+
+</details>
+
+---
+
 ## 화면 애니메이션 예시
 
 실제 프로젝터 화면의 애니메이션 예시입니다.
